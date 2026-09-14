@@ -3,7 +3,6 @@
 
 using namespace std;
 
-// --- Clasa Abstracta: Produs ---
 class Produs {
 protected:
     string nume;
@@ -15,23 +14,19 @@ public:
     virtual double getPretFinal() = 0;
     virtual string getDescriere() = 0;
 
-    // Supradefinire operator + pentru suma preturilor finale
     double operator+(Produs& altul) {
         return this->getPretFinal() + altul.getPretFinal();
     }
 
-    // Supradefinire operator == [cite: 151, 159]
     int operator==(Produs& altul) {
         return this->nume == altul.nume;
     }
 
     string getNume() { return nume; }
 
-    // Destructor virtual pentru eliberarea corecta a memoriei
     virtual ~Produs() {}
 };
 
-// --- Clase Derivate ---
 
 class ProdusFizic : public Produs {
     double greutate;
@@ -51,13 +46,13 @@ public:
 
 class ProdusDigital : public Produs {
     string linkDownload;
-    bool esteWeekend; // Folosim int pentru 0/1 (stil C)
+    bool esteWeekend;
 public:
     ProdusDigital(string n, double p, string link, int weekend)
         : Produs(n, p), linkDownload(link), esteWeekend(weekend) {}
 
     double getPretFinal() {
-        if (esteWeekend) return pretBaza * 0.90; // Reducere 10%
+        if (esteWeekend) return pretBaza * 0.90;
         return pretBaza;
     }
 
@@ -73,7 +68,7 @@ public:
         : Produs(n, p), zilePanaLaExpirare(zile) {}
 
     double getPretFinal() {
-        if (zilePanaLaExpirare <= 2) return pretBaza * 0.50; // Reducere 50%
+        if (zilePanaLaExpirare <= 2) return pretBaza * 0.50;
         return pretBaza;
     }
 
@@ -82,16 +77,15 @@ public:
     }
 };
 
-// --- Clasa Cos: Gestionare Tablou Dinamic de Pointeri ---
 class Cos {
-    Produs** elemente; // Tablou de pointeri catre clasa de baza [cite: 1057]
+    Produs** elemente;
     int nr;
     int capacitate;
 public:
     Cos(int cap) {
         this->capacitate = cap;
         this->nr = 0;
-        this->elemente = new Produs*[capacitate]; // Alocare dinamica [cite: 782, 783]
+        this->elemente = new Produs*[capacitate];
     }
 
     void adauga(Produs* p) {
@@ -101,7 +95,6 @@ public:
         }
     }
 
-    // Calcul total folosind legarea dinamica (polimorfism) [cite: 1067, 1088]
     double calculeazaTotal() {
         double total = 0;
         for (int i = 0; i < nr; i++) {
@@ -117,7 +110,6 @@ public:
         }
     }
 
-    // Destructor pentru eliberarea memoriei alocate cu new [cite: 49, 50]
     ~Cos() {
         for (int i = 0; i < nr; i++) {
             delete elemente[i];
@@ -127,13 +119,12 @@ public:
 };
 
 int main() {
-    // Simulare conform cerintelor
     Cos cosulMeu(5);
 
     // Adaugare produse prin alocare dinamica
     cosulMeu.adauga(new ProdusFizic("Tastatura", 150, 0.8, 10));
-    cosulMeu.adauga(new ProdusDigital("Software", 200, "site.com/soft", 1)); // Este weekend
-    cosulMeu.adauga(new ProdusPerisabil("Iaurt", 12, 1)); // Expira curand
+    cosulMeu.adauga(new ProdusDigital("Software", 200, "site.com/soft", 1));
+    cosulMeu.adauga(new ProdusPerisabil("Iaurt", 12, 1));
 
     cout << "Produse in cos:" << endl;
     cosulMeu.afiseazaProduse();
