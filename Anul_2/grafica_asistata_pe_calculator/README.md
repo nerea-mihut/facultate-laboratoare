@@ -5,8 +5,8 @@ Acest repository conține colecția de aplicații și laboratoare dezvoltate pen
 ## Structura Proiectului & Fișierele
 
 ### Laboratoare de Bază & Transformări 2D
-* **manipulare_poligon.cpp** - Încărcare de poligoane din fișiere externe, translatare în raport cu primul nod sau cu centrul de greutate și generare de poligoane regulate.  
-  ![Manipulare Poligon](screenshots/manipulare_poligon.png)
+* **manipulare_poligoane.cpp** - Încărcare de poligoane din fișiere externe, translatare în raport cu primul nod sau cu centrul de greutate și generare de poligoane regulate.  
+  ![Manipulare Poligoane](screenshots/manipulare_poligoane.png)
 * **hexagon_transformari.cpp** - Construirea unui hexagon regulat și aplicarea succesivă de transformări geometrice (translație, scalare).  
   ![Hexagon Transformari](screenshots/hexagon_transformari.png)
 * **fagure.cpp** - Generarea unui ansamblu de hexagoane interconectate sub formă de fagure.  
