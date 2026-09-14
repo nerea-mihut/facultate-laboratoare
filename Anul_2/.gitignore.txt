@@ -1,0 +1,17 @@
+# Executabile C++ și binare
+*.exe
+*.o
+*.obj
+
+# Fișiere specifice Code::Blocks
+*.layout
+*.depend
+*.cbp
+
+# Fișiere compilate Java
+*.class
+
+# Setări ascunse generate de IDE-uri (IntelliJ, Eclipse, etc.)
+.idea/
+*.iml
+.vscode/
