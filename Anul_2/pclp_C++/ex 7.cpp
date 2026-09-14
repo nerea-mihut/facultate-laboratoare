@@ -3,19 +3,17 @@
 
 using namespace std;
 
-// --- Clasa Abstracta: ContBancar [cite: 1091-1092] ---
 class ContBancar {
 protected:
     string titular;
     double sold;
-    string istoric[5]; // Retine ultimele 5 tranzactii
+    string istoric[5]; 
     int nrTranzactii;
 
     void adaugaInIstoric(string detalii) {
         if (nrTranzactii < 5) {
             istoric[nrTranzactii++] = detalii;
         } else {
-            // Shiftare pentru a face loc tranzactiei noi (stil laborator)
             for (int i = 0; i < 4; i++) istoric[i] = istoric[i + 1];
             istoric[4] = detalii;
         }
@@ -24,10 +22,9 @@ protected:
 public:
     ContBancar(string t, double s) : titular(t), sold(s), nrTranzactii(0) {}
 
-    virtual void depune(double suma) = 0; // Metoda pura virtuala
+    virtual void depune(double suma) = 0;
     virtual void retrage(double suma) = 0;
 
-    // Supradefinire operator << (friend pentru acces la membri)
     friend ostream& operator<<(ostream& out, const ContBancar& c) {
         out << "\nTitular: " << c.titular << " | Sold: " << c.sold << " RON";
         out << "\nIstoric tranzactii:";
@@ -37,14 +34,12 @@ public:
         return out;
     }
 
-    // Supradefinire operator -- (postfix) pentru comision fix
     void operator--(int) {
         double comision = 5.0;
         this->sold -= comision;
         this->adaugaInIstoric("Comision bancar: 5 RON");
     }
 
-    // Supradefinire operator + pentru unirea conturilor
     ContBancar& operator+(ContBancar& altul) {
         this->sold += altul.sold;
         this->adaugaInIstoric("Transfer unire conturi: +" + to_string(altul.sold));
@@ -57,7 +52,6 @@ public:
     virtual ~ContBancar() {}
 };
 
-// --- Clase Derivate [cite: 247-249] ---
 
 class ContCurent : public ContBancar {
     double limitaDescoperire;
@@ -80,7 +74,7 @@ public:
 };
 
 class ContEconomii : public ContBancar {
-    double rataDobanda; // ex: 0.05 pentru 5%
+    double rataDobanda; 
     double soldMinim;
 public:
     ContEconomii(string t, double s, double dobanda, double minim)
@@ -103,24 +97,20 @@ public:
 };
 
 int main() {
-    // Utilizarea polimorfismului cu tablou de pointeri [cite: 1057-1060]
     ContBancar* c1 = new ContCurent("Ionescu Dan", 1000, 500);
     ContBancar* c2 = new ContEconomii("Popescu Ana", 2000, 0.05, 500);
 
     c1->depune(200);
-    c1->retrage(1400); // Permite datorita descoperirii de cont
+    c1->retrage(1400);
 
     c2->depune(500);
-    c2->retrage(2200); // Refuza (sold minim)
+    c2->retrage(2200);
 
-    // Testare operator -- (comision)
     (*c1)--;
 
-    // Testare operator <<
     cout << *c1;
     cout << *c2;
 
-    // Testare operator + (Unire conturi)
     cout << "\n\n--- Unire conturi (c1 + c2) ---";
     *c1 + *c2;
 
