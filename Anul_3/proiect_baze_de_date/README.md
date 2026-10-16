@@ -1,7 +1,7 @@
 # Sistem de Gestiune și Administrare pentru Salon de Manichiură și Academie de Nail Art
 
 Acesta este depozitul aferent proiectului la disciplina **Baze de Date** (Anul 3, 2026-2027). 
-Proiectul presupune dezvoltarea unei baze de date relaționale pentru optimizarea fluxurilor operaționale dintr-un salon de înfrumusețare care funcționează și ca academie de formare profesională.
+Proiectul presupune dezvoltarea unei baze de date pentru optimizarea fluxurilor operaționale dintr-un salon de înfrumusețare care funcționează și ca academie de formare profesională.
 
 ## Funcționalități principale
 - **Gestiunea clienților și cursanților:** Istoric programări, reduceri (onomastice/fidelitate), alerte medicale (alergii).
