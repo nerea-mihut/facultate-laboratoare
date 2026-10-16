@@ -18,4 +18,4 @@ Proiectul presupune dezvoltarea unei baze de date pentru optimizarea fluxurilor 
 - `app/` - Aplicația practică și scripturile de conectare.
 
 ## Autor
-**Mihuț Nerea** - Grupa II, Specializarea Calculatoare, Anul 3
+**Mihuț Nerea** - Specializarea Calculatoare, Anul 3
