@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net">
   <diagram name="Page-1" id="y1Tp5Dq7wtpHW-_PW7MC">
-    <mxGraphModel dx="1133" dy="969" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1269" dy="562" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -15,6 +15,9 @@
         </mxCell>
         <mxCell id="1GNB1Qa9LRdG02zhwqDA-53" parent="1GNB1Qa9LRdG02zhwqDA-2" style="ellipse;whiteSpace=wrap;html=1;" value="Gestionare disponibilitate proprie" vertex="1">
           <mxGeometry height="70" width="220" x="135" y="310" as="geometry" />
+        </mxCell>
+        <mxCell id="0Y3bXoqVNu8xsIaHz74S-5" parent="1GNB1Qa9LRdG02zhwqDA-2" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Sistem de gestiune pentru salon de manichiură și academie de nail art" vertex="1">
+          <mxGeometry height="30" width="400" x="60" as="geometry" />
         </mxCell>
         <mxCell id="1GNB1Qa9LRdG02zhwqDA-3" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="1. Angajat-- functii comune si specializarea rolurilor" vertex="1">
           <mxGeometry height="30" width="250" x="455" y="60" as="geometry" />
@@ -58,6 +61,21 @@
           <mxGeometry height="50" relative="1" width="50" as="geometry">
             <mxPoint x="500" y="460" as="sourcePoint" />
             <mxPoint x="550" y="410" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="0Y3bXoqVNu8xsIaHz74S-1" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;labelPerimeter=1;" value="client" vertex="1">
+          <mxGeometry height="60" width="30" x="1030" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="0Y3bXoqVNu8xsIaHz74S-3" edge="1" parent="1" source="0Y3bXoqVNu8xsIaHz74S-1" style="endArrow=none;html=1;rounded=0;defaultLabelBackgroundColor=page;entryX=1;entryY=0.5;entryDx=0;entryDy=0;exitX=0;exitY=0.3333333333333333;exitDx=0;exitDy=0;exitPerimeter=0;" target="1GNB1Qa9LRdG02zhwqDA-51" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="660" y="480" as="sourcePoint" />
+            <mxPoint x="710" y="430" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="0Y3bXoqVNu8xsIaHz74S-4" edge="1" parent="1" source="1GNB1Qa9LRdG02zhwqDA-52" style="endArrow=none;html=1;rounded=0;defaultLabelBackgroundColor=page;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.3333333333333333;entryDx=0;entryDy=0;entryPerimeter=0;" target="0Y3bXoqVNu8xsIaHz74S-1" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="660" y="480" as="sourcePoint" />
+            <mxPoint x="710" y="430" as="targetPoint" />
           </mxGeometry>
         </mxCell>
       </root>
