@@ -31,10 +31,11 @@ class Individ:
     def generate_random(self):
         self._cromozom = [random.randint(0,1) for i in range(len(obiecte))] 
 
-
-
     def get_cromozom(self):
         return self._cromozom
+
+    def print_cromozom(self):
+        print(self._cromozom)
 
     def mutate(self):
         for j in range(len(obiecte) - 1):
@@ -75,10 +76,8 @@ def selectia_parintilor(): #demonstrativ
 def recombinare(parinti):
     p1, p2 = parinti
     pct_taiere = random.randint(1, len(obiecte)-2) 
-    c1 = Individ()
-    c2 = Individ()
-    c1.set_cromozom(p1.get_cromozom()[:pct_taiere] + p2.get_cromozom()[pct_taiere:])
-    c2.set_cromozom(p1.get_cromozom()[pct_taiere:] + p2.get_cromozom()[:pct_taiere])
+    c1 = Individ(p1.get_cromozom()[:pct_taiere] + p2.get_cromozom()[pct_taiere:])
+    c2 = Individ(p1.get_cromozom()[pct_taiere:] + p2.get_cromozom()[:pct_taiere])
     return [c1, c2]
 
 def mutatie(temp_gen):
@@ -98,7 +97,6 @@ def med_fitness_per_populatie(pop):
 
 population = gen_pop_initiala()
 
-
 print(med_fitness_per_populatie(population))
 
 for i in range(nr_gen):
@@ -115,14 +113,12 @@ for i in range(nr_gen):
     population= sorted(population, key=lambda ind: ind.get_fitness(), reverse=True)[:pop_size] #sortam populatia dupa fitness si luam doar primii pop_size indivizi
     population = population[:pop_size] #ii luam pe primii 10
 
-
-
 print('populatie finala:')
 
 print(med_fitness_per_populatie(population))
 
 for ind in population:
-    print(ind)
+    ind.print_cromozom()
     print(ind.get_fitness())
 
 
