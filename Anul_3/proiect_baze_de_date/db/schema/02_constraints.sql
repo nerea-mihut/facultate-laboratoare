@@ -1,6 +1,5 @@
 USE proiect_salon;
 
-
 -- CHEI STRAINE
 
 ALTER TABLE tehnician
@@ -34,7 +33,16 @@ ALTER TABLE sesiune_curs
 
     ADD CONSTRAINT fk_sesiune_trainer
     FOREIGN KEY (id_trainer)
-    REFERENCES trainer(id_angajat);
+    REFERENCES trainer(id_angajat),
+
+    ADD CONSTRAINT chk_sesiune_durata
+    CHECK (durata > 0),
+
+    ADD CONSTRAINT chk_sesiune_pret
+    CHECK (pret >= 0),
+
+    ADD CONSTRAINT chk_sesiune_cursanti
+    CHECK (nr_maxim_cursanti BETWEEN 1 AND 8);
 
 ALTER TABLE interval_sesiune
     ADD CONSTRAINT fk_interval_sesiune
@@ -52,7 +60,10 @@ ALTER TABLE inscriere
 
     ADD CONSTRAINT fk_inscriere_inlocuita
     FOREIGN KEY (id_inscriere_inlocuita)
-    REFERENCES inscriere(id_inscriere);
+    REFERENCES inscriere(id_inscriere),
+
+    ADD CONSTRAINT chk_inscriere_pret
+    CHECK (pret_aplicat >= 0);
 
 ALTER TABLE plata
     ADD CONSTRAINT fk_plata_inscriere
@@ -119,7 +130,6 @@ ALTER TABLE lista_asteptare
     FOREIGN KEY (id_sesiune)
     REFERENCES sesiune_curs(id_sesiune);
 
-
 -- REGULI DE UNICITATE
 
 ALTER TABLE angajat
@@ -144,7 +154,6 @@ ALTER TABLE stoc
     ADD CONSTRAINT uq_stoc_produs_destinatie
     UNIQUE (id_produs, destinatie);
 
-
 -- VERIFICARI CHECK
 
 ALTER TABLE interval_disponibilitate
@@ -154,13 +163,6 @@ ALTER TABLE interval_disponibilitate
 ALTER TABLE interval_sesiune
     ADD CONSTRAINT chk_sesiune_interval
     CHECK (sfarsit > inceput);
-
-ALTER TABLE sesiune_curs
-    ADD CONSTRAINT chk_sesiune_pret
-    CHECK (pret >= 0),
-
-    ADD CONSTRAINT chk_sesiune_capacitate
-    CHECK (nr_maxim_cursanti BETWEEN 1 AND 8);
 
 ALTER TABLE inscriere
     ADD CONSTRAINT chk_inscriere_pret

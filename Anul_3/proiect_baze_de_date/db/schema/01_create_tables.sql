@@ -99,23 +99,16 @@ CREATE TABLE programare (
   DEFAULT CHARSET=utf8mb4
   COLLATE=utf8mb4_unicode_ci;
 
-
 CREATE TABLE sesiune_curs (
     id_sesiune INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     id_curs INT UNSIGNED NOT NULL,
     id_trainer INT UNSIGNED NOT NULL,
+    data_sesiune DATE NULL,
+    durata INT UNSIGNED NULL,
     pret DECIMAL(10,2) NOT NULL,
     nr_maxim_cursanti TINYINT UNSIGNED NOT NULL DEFAULT 8,
-    stare ENUM(
-        'Planificata',
-        'In_desfasurare',
-        'Finalizata',
-        'Anulata'
-    ) NOT NULL DEFAULT 'Planificata'
-) ENGINE=InnoDB
-  DEFAULT CHARSET=utf8mb4
-  COLLATE=utf8mb4_unicode_ci;
-
+    stare ENUM('Planificata','In_desfasurare','Finalizata','Anulata') NOT NULL DEFAULT 'Planificata'
+);
 
 CREATE TABLE interval_sesiune (
     id_interval INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -131,21 +124,13 @@ CREATE TABLE inscriere (
     id_inscriere INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     id_client INT UNSIGNED NOT NULL,
     id_sesiune INT UNSIGNED NOT NULL,
+    data_cursului DATE NULL,
     data_inscrierii DATE NOT NULL,
-    stare ENUM(
-        'In_asteptare',
-        'Confirmata',
-        'In_curs',
-        'Finalizata',
-        'Retrasa',
-        'Inlocuita'
-    ) NOT NULL DEFAULT 'In_asteptare',
+    stare ENUM('In_asteptare','Confirmata','In_curs','Finalizata','Retrasa','Inlocuita') NOT NULL DEFAULT 'In_asteptare',
     pret_aplicat DECIMAL(10,2) NOT NULL,
     data_anuntarii_retragerii DATE NULL,
     id_inscriere_inlocuita INT UNSIGNED NULL
-) ENGINE=InnoDB
-  DEFAULT CHARSET=utf8mb4
-  COLLATE=utf8mb4_unicode_ci;
+);
 
 
 CREATE TABLE plata (
