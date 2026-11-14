@@ -1,0 +1,134 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Page-1" id="rQNZceCppn2aR8QiZJiw">
+    <mxGraphModel dx="1690" dy="677" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" background="light-dark(#ffffff, #121212)" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <UserObject label="" plantUmlData="{&#xa;  &quot;data&quot;: &quot;@startuml\ntitle Diagrama de Secvență — Înscriere la Sesiune de Curs și Plată Online Avans\n\nactor \&quot;Client\&quot; as C\nparticipant \&quot;:InterfataCursuri\&quot; as UI\nparticipant \&quot;:ControllerAcademie\&quot; as Ctrl\nparticipant \&quot;:SesiuneCurs\&quot; as Ses\nparticipant \&quot;:ProcesatorPlati\&quot; as Pay\n\nautonumber\n\nC -&gt; UI : selecteazaSesiune(idSesiune)\nUI -&gt; Ctrl : solicitaInscriere(idClient, idSesiune, documente)\nCtrl -&gt; Ses : verificaLocuriLibere()\nSes --&gt; Ctrl : nrLocuriDisponibile\n\nalt nrLocuriDisponibile &gt; 0 &amp;&amp; documenteValide\n    Ctrl -&gt; Pay : initiazaPlataAvans(sumaAvans)\n    Pay --&gt; Ctrl : confirmareTranzactie(OK)\n    Ctrl -&gt; Ses : inregistreazaInscriereConfirmata()\n    Ctrl --&gt; UI : afiseazaConfirmareLoc()\n    UI --&gt; C : notificareInscriereReusita()\nelse nrLocuriDisponibile == 0\n    Ctrl -&gt; Ses : adaugaPeListaAsteptare(idClient)\n    Ctrl --&gt; UI : propuneListaAsteptare()\n    UI --&gt; C : confirmareAdaugareListaAsteptare()\nend\n@enduml&quot;,&#xa;  &quot;config&quot;: null&#xa;}" id="lTdkPwu5B9D_6EH-eD9j-190">
+          <mxCell connectable="0" parent="1" style="group;transparentBounds=1;editIcon=1;lockedGroup=0;groupPadding=10;" vertex="1">
+            <mxGeometry as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="" plantUmlId="pl_0" plantUmlBaseStyle="shape=umlLifeline;perimeter=lifelinePerimeter;participant=headless;size=75.49;lifelineMirror=1;dashPattern=5 5;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;sequenceEdgeStyle&quot;,&quot;libavoidRouting&quot;:0,&quot;curved&quot;:0,&quot;rounded&quot;:0};fillColor=none;strokeColor=#181818;strokeWidth=0.5;" plantUmlBaseValue="" id="lTdkPwu5B9D_6EH-eD9j-191">
+          <mxCell parent="lTdkPwu5B9D_6EH-eD9j-190" style="shape=umlLifeline;perimeter=lifelinePerimeter;participant=headless;size=75.49;lifelineMirror=1;dashPattern=5 5;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;sequenceEdgeStyle&quot;,&quot;libavoidRouting&quot;:0,&quot;curved&quot;:0,&quot;rounded&quot;:0};fillColor=none;strokeColor=#181818;strokeWidth=0.5;" vertex="1">
+            <mxGeometry height="568.97" width="39.5049" x="40" y="300.95" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="" plantUmlData="{&#xa;  &quot;data&quot;: &quot;@startuml\ntitle Diagrama de Colaborare — Înscriere la Sesiune de Curs și Plată Online Avans\n\nskinparam linetype ortho\nleft to right direction\n\nactor \&quot;Client\&quot; as C\nobject \&quot;:InterfataCursuri\&quot; as UI\nobject \&quot;:ControllerAcademie\&quot; as Ctrl\nobject \&quot;:SesiuneCurs\&quot; as Ses\nobject \&quot;:ProcesatorPlati\&quot; as Pay\n\nC -- UI : 1: selecteazaSesiune(idSesiune) ▶\\n2: incarcaDocumente(docs) ▶\\n9: ◀ notificareInscriereReusita()\n\nUI -- Ctrl : 3: solicitaInscriere(idClient, idSesiune, docs) ▶\\n8: ◀ afiseazaConfirmareLoc()\n\nCtrl -- Ses : 4: verificaLocuriLibere() ▶\\n7: inregistreazaInscriereConfirmata() ▶\n\nCtrl -- Pay : 5: initiazaPlataAvans(sumaAvans) ▶\\n6: ◀ confirmareTranzactie(OK)\n@enduml&quot;,&#xa;  &quot;config&quot;: null&#xa;}" id="lTdkPwu5B9D_6EH-eD9j-216">
+          <mxCell connectable="0" parent="1" style="group;transparentBounds=1;editIcon=1;lockedGroup=0;groupPadding=10;" vertex="1">
+            <mxGeometry as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="Diagrama de Colaborare — Înscriere la Sesiune de Curs și Plată Online Avans" plantUmlId="title_0" plantUmlBaseStyle="text;html=1;fillColor=none;strokeColor=none;fontSize=14;fontStyle=1;fontColor=#000000;align=center;verticalAlign=middle;whiteSpace=wrap;" plantUmlBaseValue="Diagrama de Colaborare — Înscriere la Sesiune de Curs și Plată Online Avans" id="lTdkPwu5B9D_6EH-eD9j-226">
+          <mxCell parent="lTdkPwu5B9D_6EH-eD9j-216" style="text;html=1;fillColor=none;strokeColor=none;fontSize=14;fontStyle=1;fontColor=#000000;align=center;verticalAlign=middle;whiteSpace=wrap;" vertex="1">
+            <mxGeometry height="24" width="566" x="340" y="1290" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="lTdkPwu5B9D_6EH-eD9j-227" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=15;" value=":Client" vertex="1">
+          <mxGeometry height="60" width="120" x="50" y="1430" as="geometry" />
+        </mxCell>
+        <mxCell id="lTdkPwu5B9D_6EH-eD9j-228" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=15;" value=":InterfațăÎnscriereCurs" vertex="1">
+          <mxGeometry height="60" width="150" x="532.68" y="1430" as="geometry" />
+        </mxCell>
+        <mxCell id="lTdkPwu5B9D_6EH-eD9j-231" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="1: selecteazăSesiuneCurs()&lt;div&gt;2: incarcăDocumente()&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="170.53" x="170" y="1415" as="geometry" />
+        </mxCell>
+        <mxCell id="lTdkPwu5B9D_6EH-eD9j-233" edge="1" parent="1" source="lTdkPwu5B9D_6EH-eD9j-227" style="endArrow=none;html=1;rounded=0;defaultLabelBackgroundColor=page;labelPadding=0 4;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="lTdkPwu5B9D_6EH-eD9j-228" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="170" y="1520" as="sourcePoint" />
+            <mxPoint x="460" y="1440" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lTdkPwu5B9D_6EH-eD9j-235" edge="1" parent="1" style="endArrow=classic;html=1;rounded=0;defaultLabelBackgroundColor=page;labelPadding=0 4;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="210" y="1420" as="sourcePoint" />
+            <mxPoint x="260" y="1420" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lTdkPwu5B9D_6EH-eD9j-236" edge="1" parent="1" style="endArrow=classic;html=1;rounded=0;defaultLabelBackgroundColor=page;labelPadding=0 4;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="500" y="1490" as="sourcePoint" />
+            <mxPoint x="430" y="1490" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lTdkPwu5B9D_6EH-eD9j-237" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="9: notificareÎnscriereReusită()" vertex="1">
+          <mxGeometry height="30" width="162.68" x="370" y="1457" as="geometry" />
+        </mxCell>
+        <mxCell id="lTdkPwu5B9D_6EH-eD9j-238" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=15;" value=":ControllerAcademie" vertex="1">
+          <mxGeometry height="60" width="140" x="970" y="1430" as="geometry" />
+        </mxCell>
+        <mxCell id="lTdkPwu5B9D_6EH-eD9j-239" edge="1" parent="1" source="lTdkPwu5B9D_6EH-eD9j-228" style="endArrow=none;html=1;rounded=0;defaultLabelBackgroundColor=page;labelPadding=0 4;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=0.997;exitY=0.554;exitDx=0;exitDy=0;exitPerimeter=0;" target="lTdkPwu5B9D_6EH-eD9j-238" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="649.9999999999999" y="1458.9999999999998" as="sourcePoint" />
+            <mxPoint x="957.32" y="1458.9999999999998" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lTdkPwu5B9D_6EH-eD9j-240" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="3: solicităÎnscriere()" vertex="1">
+          <mxGeometry height="24" width="125.47" x="677.32" y="1439" as="geometry" />
+        </mxCell>
+        <mxCell id="lTdkPwu5B9D_6EH-eD9j-241" edge="1" parent="1" style="endArrow=classic;html=1;rounded=0;defaultLabelBackgroundColor=page;labelPadding=0 4;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="707.32" y="1439" as="sourcePoint" />
+            <mxPoint x="757.32" y="1439" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lTdkPwu5B9D_6EH-eD9j-242" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="8: afișeazăConfirmareLoc()" vertex="1">
+          <mxGeometry height="30" width="170.53" x="790.0000000000001" y="1460" as="geometry" />
+        </mxCell>
+        <mxCell id="lTdkPwu5B9D_6EH-eD9j-243" edge="1" parent="1" style="endArrow=classic;html=1;rounded=0;defaultLabelBackgroundColor=page;labelPadding=0 4;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="917.32" y="1486" as="sourcePoint" />
+            <mxPoint x="857.32" y="1486" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lTdkPwu5B9D_6EH-eD9j-244" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=15;" value=":ProcesorPlăți" vertex="1">
+          <mxGeometry height="60" width="120" x="1350" y="1230" as="geometry" />
+        </mxCell>
+        <mxCell id="lTdkPwu5B9D_6EH-eD9j-245" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=15;" value=":SesiuneCurs" vertex="1">
+          <mxGeometry height="60" width="120" x="1350" y="1660" as="geometry" />
+        </mxCell>
+        <mxCell id="lTdkPwu5B9D_6EH-eD9j-246" edge="1" parent="1" source="lTdkPwu5B9D_6EH-eD9j-238" style="endArrow=none;html=1;rounded=0;defaultLabelBackgroundColor=page;labelPadding=0 4;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="lTdkPwu5B9D_6EH-eD9j-245" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="1130" y="1460" as="sourcePoint" />
+            <mxPoint x="1180" y="1410" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lTdkPwu5B9D_6EH-eD9j-248" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;rotation=45;" value="4:verificăLocuriLibere()&lt;div&gt;7: înregistreazăÎnscriereConfirmată()&lt;/div&gt;" vertex="1">
+          <mxGeometry height="30" width="230" x="1080" y="1560" as="geometry" />
+        </mxCell>
+        <mxCell id="lTdkPwu5B9D_6EH-eD9j-249" edge="1" parent="1" style="endArrow=classic;html=1;rounded=0;defaultLabelBackgroundColor=page;labelPadding=0 4;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="1165" y="1490" as="sourcePoint" />
+            <mxPoint x="1205" y="1530" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lTdkPwu5B9D_6EH-eD9j-250" edge="1" parent="1" source="lTdkPwu5B9D_6EH-eD9j-238" style="endArrow=none;html=1;rounded=0;defaultLabelBackgroundColor=page;labelPadding=0 4;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="lTdkPwu5B9D_6EH-eD9j-244" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="1230" y="1540" as="sourcePoint" />
+            <mxPoint x="1240" y="1350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lTdkPwu5B9D_6EH-eD9j-251" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;rotation=-40;" value="5: initiazăPlatăAvans" vertex="1">
+          <mxGeometry height="30" width="207.27" x="1070" y="1380" as="geometry" />
+        </mxCell>
+        <mxCell id="lTdkPwu5B9D_6EH-eD9j-252" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;rotation=-42;" value="6: confirmareTranzactie(OK)" vertex="1">
+          <mxGeometry height="30" width="170.53" x="1200" y="1320" as="geometry" />
+        </mxCell>
+        <mxCell id="lTdkPwu5B9D_6EH-eD9j-254" edge="1" parent="1" style="edgeStyle=none;orthogonalLoop=1;jettySize=auto;html=1;rounded=0;defaultLabelBackgroundColor=page;labelPadding=0 4;" value="">
+          <mxGeometry relative="1" width="100" as="geometry">
+            <Array as="points" />
+            <mxPoint x="1120" y="1410" as="sourcePoint" />
+            <mxPoint x="1170" y="1370" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lTdkPwu5B9D_6EH-eD9j-255" edge="1" parent="1" style="edgeStyle=none;orthogonalLoop=1;jettySize=auto;html=1;rounded=0;defaultLabelBackgroundColor=page;labelPadding=0 4;" value="">
+          <mxGeometry relative="1" width="100" as="geometry">
+            <Array as="points" />
+            <mxPoint x="1310" y="1330" as="sourcePoint" />
+            <mxPoint x="1270" y="1370" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
