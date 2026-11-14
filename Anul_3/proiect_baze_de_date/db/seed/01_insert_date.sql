@@ -296,20 +296,17 @@ VALUES
     (14, 'Manichiura clasica', 'Manichiura');
 
 
--- 8. OFERTE TEHNICIENI
--- Toti tehnicienii ofera toate serviciile active.
+-- 8. OFERTE TEHNICIENI Toti tehnicienii ofera toate serviciile active.
 
 INSERT INTO tehnician_serviciu
     (id_tehnician, id_serviciu, durata, pret, stare_oferta)
 SELECT
     t.id_angajat,
-    s.id_serviciu,
+    o.id_serviciu,
     o.durata,
     o.pret,
     'Activa'
 FROM tehnician AS t
-INNER JOIN serviciu AS s
-    ON s.id_serviciu = o.id_serviciu
 CROSS JOIN (
     SELECT 1 AS id_serviciu, 60 AS durata, 130.00 AS pret
     UNION ALL SELECT 2, 90, 150.00
@@ -326,7 +323,6 @@ CROSS JOIN (
     UNION ALL SELECT 13, 60, 100.00
     UNION ALL SELECT 14, 35, 100.00
 ) AS o;
-
 
 -- 9. CURSURI
 
