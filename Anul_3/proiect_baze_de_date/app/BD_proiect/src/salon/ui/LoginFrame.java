@@ -271,7 +271,7 @@ public class LoginFrame extends JFrame {
                             "Autentificare reușită."
                     );
 
-                    openWindowForRole(role);
+                    openWindowForRole(role, email);
 
                 } catch (Exception exception) {
                     statusLabel.setForeground(
@@ -360,7 +360,20 @@ public class LoginFrame extends JFrame {
         );
     }
 
-    private void openWindowForRole(String role) {
+    private void openWindowForRole(
+            String role,
+            String email
+    ) {
+        if ("Client".equals(role)) {
+            ClientDashboard clientDashboard =
+                    new ClientDashboard(email);
+
+            clientDashboard.setVisible(true);
+            dispose();
+
+            return;
+        }
+
         JOptionPane.showMessageDialog(
                 this,
                 "Bine ai venit!\nRolul contului: " + role
