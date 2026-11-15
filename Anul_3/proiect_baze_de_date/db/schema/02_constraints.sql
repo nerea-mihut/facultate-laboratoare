@@ -225,3 +225,13 @@ ALTER TABLE miscare_stoc
             AND id_stoc_sursa <> id_stoc_destinatie
         )
     );
+
+ALTER TABLE utilizator
+    ADD CONSTRAINT fk_utilizator_client
+    FOREIGN KEY (id_client)
+    REFERENCES client (id_client);
+
+ALTER TABLE utilizator
+    ADD CONSTRAINT fk_utilizator_angajat
+    FOREIGN KEY (id_angajat)
+    REFERENCES angajat (id_angajat);

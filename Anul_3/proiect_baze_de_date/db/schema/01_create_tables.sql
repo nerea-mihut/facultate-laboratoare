@@ -261,3 +261,16 @@ CREATE TABLE lista_asteptare (
 ) ENGINE=InnoDB
   DEFAULT CHARSET=utf8mb4
   COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE utilizator (
+    id_utilizator INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    email VARCHAR(100) NOT NULL,
+    parola VARCHAR(255) NOT NULL,
+    rol ENUM('Client', 'Tehnician', 'Trainer') NOT NULL,
+    id_client INT UNSIGNED NULL,
+    id_angajat INT UNSIGNED NULL,
+    PRIMARY KEY (id_utilizator),
+    UNIQUE KEY uq_utilizator_email (email)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
