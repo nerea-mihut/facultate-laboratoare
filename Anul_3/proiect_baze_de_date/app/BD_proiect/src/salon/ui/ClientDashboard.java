@@ -54,6 +54,9 @@ public class ClientDashboard extends JFrame {
     private final JLabel profileStatusLabel = new JLabel(" ");
     private final JLabel passwordStatusLabel = new JLabel(" ");
 
+    private AppointmentBookingPanel appointmentPanel;
+    private CourseBookingPanel coursePanel;
+
     public ClientDashboard(String userEmail) {
         this.userEmail = userEmail;
 
@@ -73,6 +76,12 @@ public class ClientDashboard extends JFrame {
 
         contentPanel.add(createHomePanel(), "HOME");
         contentPanel.add(createProfilePanel(), "PROFILE");
+
+        appointmentPanel = new AppointmentBookingPanel(userEmail);
+        contentPanel.add(appointmentPanel, "APPOINTMENTS");
+
+        coursePanel = new CourseBookingPanel(userEmail);
+        contentPanel.add(coursePanel, "COURSES");
 
         loadProfileData();
 
@@ -185,26 +194,14 @@ public class ClientDashboard extends JFrame {
         JButton appointmentsButton =
                 createMenuButton("Programări salon");
 
-        appointmentsButton.addActionListener(e ->
-                showMessage(
-                        "Programări salon",
-                        "Aici vei putea alege tehnicianul, "
-                                + "serviciile dorite și un interval disponibil."
-                )
-        );
+        appointmentsButton.addActionListener(e -> showAppointments());
 
         addRow(card, appointmentsButton, c, 1, 0, 16);
 
         JButton coursesButton =
                 createMenuButton("Cursuri academie");
 
-        coursesButton.addActionListener(e ->
-                showMessage(
-                        "Cursuri academie",
-                        "Aici vei putea consulta cursurile și sesiunile "
-                                + "disponibile, apoi te vei putea înscrie."
-                )
-        );
+        coursesButton.addActionListener(e -> showCourses());
 
         addRow(card, coursesButton, c, 2, 0, 0);
 
@@ -248,7 +245,7 @@ public class ClientDashboard extends JFrame {
         );
         editDataButton.setBackground(INK);
         editDataButton.setForeground(WHITE);
-        editDataButton.setPreferredSize(new Dimension(360, 46));
+        editDataButton.setPreferredSize(new Dimension(420, 46));
         editDataButton.setCursor(
                 Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
         );
@@ -260,7 +257,7 @@ public class ClientDashboard extends JFrame {
         );
         saveDataButton.setBackground(INK);
         saveDataButton.setForeground(WHITE);
-        saveDataButton.setPreferredSize(new Dimension(360, 46));
+        saveDataButton.setPreferredSize(new Dimension(420, 46));
         saveDataButton.setCursor(
                 Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
         );
@@ -279,7 +276,7 @@ public class ClientDashboard extends JFrame {
         );
         changePasswordButton.setBackground(INK);
         changePasswordButton.setForeground(WHITE);
-        changePasswordButton.setPreferredSize(new Dimension(360, 46));
+        changePasswordButton.setPreferredSize(new Dimension(420, 46));
         changePasswordButton.setCursor(
                 Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
         );
@@ -326,7 +323,7 @@ public class ClientDashboard extends JFrame {
         );
         savePasswordButton.setBackground(INK);
         savePasswordButton.setForeground(WHITE);
-        savePasswordButton.setPreferredSize(new Dimension(360, 46));
+        savePasswordButton.setPreferredSize(new Dimension(420, 46));
         savePasswordButton.setCursor(
                 Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
         );
@@ -471,6 +468,16 @@ public class ClientDashboard extends JFrame {
     private void showProfile() {
         CardLayout layout = (CardLayout) contentPanel.getLayout();
         layout.show(contentPanel, "PROFILE");
+    }
+
+    private void showAppointments() {
+        CardLayout layout = (CardLayout) contentPanel.getLayout();
+        layout.show(contentPanel, "APPOINTMENTS");
+    }
+
+    private void showCourses() {
+        CardLayout layout = (CardLayout) contentPanel.getLayout();
+        layout.show(contentPanel, "COURSES");
     }
 
     private void enableDataEditing() {
