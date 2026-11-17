@@ -1,6 +1,10 @@
 package salon.ui;
 
 import salon.db.DatabaseConnection;
+import salon.service.ClientService;
+import salon.ui.client.ClientActivityPanel;
+import salon.ui.components.RoundedCard;
+import salon.ui.components.UiStyle;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,21 +18,32 @@ import java.util.Arrays;
 
 public class ClientDashboard extends JFrame {
 
-    private static final Color CREAM = new Color(244, 240, 233);
-    private static final Color INK = new Color(30, 30, 30);
-    private static final Color MUTED = new Color(115, 110, 103);
-    private static final Color WHITE = Color.WHITE;
-    private static final Color FIELD_BACKGROUND =
-            new Color(250, 249, 247);
+    private static final Color CREAM = UiStyle.CREAM;
+    private static final Color INK = UiStyle.INK;
+    private static final Color MUTED = UiStyle.MUTED;
+    private static final Color WHITE = UiStyle.WHITE;
+    private static final Color FIELD_BACKGROUND = UiStyle.FIELD;
+    private static final Color RED = UiStyle.RED;
+    private static final Color GREEN = UiStyle.GREEN;
 
     private final String userEmail;
 
-    private final JPanel contentPanel = new JPanel(new CardLayout());
+    private final CardLayout contentLayout = new CardLayout();
 
-    private final JTextField firstNameField = new JTextField(20);
-    private final JTextField lastNameField = new JTextField(20);
-    private final JTextField emailField = new JTextField(20);
-    private final JTextField phoneField = new JTextField(20);
+    private final JPanel contentPanel =
+            new JPanel(contentLayout);
+
+    private final JTextField firstNameField =
+            new JTextField(20);
+
+    private final JTextField lastNameField =
+            new JTextField(20);
+
+    private final JTextField emailField =
+            new JTextField(20);
+
+    private final JTextField phoneField =
+            new JTextField(20);
 
     private final JButton editDataButton =
             new JButton("Doresc să-mi modific datele");
@@ -39,23 +54,35 @@ public class ClientDashboard extends JFrame {
     private final JButton changePasswordButton =
             new JButton("Doresc să-mi modific parola");
 
-    private final JPanel passwordPanel = new JPanel(new GridBagLayout());
+    private final JPanel passwordPanel =
+            new JPanel(new GridBagLayout());
 
     private final JPasswordField currentPasswordField =
             new JPasswordField(20);
+
     private final JPasswordField newPasswordField =
             new JPasswordField(20);
+
     private final JPasswordField confirmPasswordField =
             new JPasswordField(20);
 
     private final JButton savePasswordButton =
             new JButton("Salvează parola nouă");
 
-    private final JLabel profileStatusLabel = new JLabel(" ");
-    private final JLabel passwordStatusLabel = new JLabel(" ");
+    private final JLabel profileStatusLabel =
+            new JLabel(" ");
 
-    private AppointmentBookingPanel appointmentPanel;
-    private CourseBookingPanel coursePanel;
+    private final JLabel passwordStatusLabel =
+            new JLabel(" ");
+
+    private final JLabel greetingLabel =
+            new JLabel("Bine ai venit!");
+
+    private final AppointmentBookingPanel appointmentPanel;
+    private final CourseBookingPanel coursePanel;
+    private final ClientActivityPanel activityPanel;
+
+    private Integer clientId;
 
     public ClientDashboard(String userEmail) {
         this.userEmail = userEmail;
@@ -68,23 +95,59 @@ public class ClientDashboard extends JFrame {
 
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBackground(CREAM);
-
         setContentPane(mainPanel);
 
-        mainPanel.add(createTopBar(), BorderLayout.NORTH);
-        mainPanel.add(contentPanel, BorderLayout.CENTER);
+        contentPanel.setBackground(CREAM);
 
-        contentPanel.add(createHomePanel(), "HOME");
-        contentPanel.add(createProfilePanel(), "PROFILE");
+        mainPanel.add(
+                createTopBar(),
+                BorderLayout.NORTH
+        );
 
-        appointmentPanel = new AppointmentBookingPanel(userEmail);
-        contentPanel.add(appointmentPanel, "APPOINTMENTS");
+        mainPanel.add(
+                contentPanel,
+                BorderLayout.CENTER
+        );
 
-        coursePanel = new CourseBookingPanel(userEmail);
-        contentPanel.add(coursePanel, "COURSES");
+        contentPanel.add(
+                createHomePanel(),
+                "HOME"
+        );
 
+        contentPanel.add(
+                wrapWithBackButton(createProfilePanel()),
+                "PROFILE"
+        );
+
+        appointmentPanel =
+                new AppointmentBookingPanel(userEmail);
+
+        contentPanel.add(
+                wrapWithBackButton(appointmentPanel),
+                "APPOINTMENTS"
+        );
+
+        coursePanel =
+                new CourseBookingPanel(userEmail);
+
+        contentPanel.add(
+                wrapWithBackButton(coursePanel),
+                "COURSES"
+        );
+
+        activityPanel = new ClientActivityPanel(
+                new ClientService(),
+                userEmail,
+                this::showHome
+        );
+
+        contentPanel.add(
+                activityPanel,
+                "ACTIVITY"
+        );
+
+        disableDataEditing();
         loadProfileData();
-
         showHome();
 
         setVisible(true);
@@ -94,50 +157,60 @@ public class ClientDashboard extends JFrame {
         JPanel topBar = new JPanel(new BorderLayout());
         topBar.setBackground(INK);
         topBar.setBorder(
-                BorderFactory.createEmptyBorder(14, 28, 14, 28)
-        );
-
-        JLabel brand = new JLabel("SALON & ACADEMIE");
-        brand.setFont(new Font("SansSerif", Font.BOLD, 15));
-        brand.setForeground(WHITE);
-
-        topBar.add(brand, BorderLayout.WEST);
-
-        JPanel actions = new JPanel(new FlowLayout(
-                FlowLayout.RIGHT,
-                10,
-                0
-        ));
-
-        actions.setOpaque(false);
-
-        JButton homeButton = createTopBarButton("Acasă");
-
-        homeButton.addActionListener(e -> showHome());
-
-        JButton profileButton = createTopBarButton(
-                "\uD83D\uDC64  Profilul meu"
-        );
-
-        profileButton.addActionListener(e -> showProfile());
-
-        JButton activityButton = createTopBarButton(
-                "\uD83D\uDCC5  Activitatea mea"
-        );
-
-        activityButton.addActionListener(e ->
-                showMessage(
-                        "Activitatea mea",
-                        "Aici vor apărea programările tale, dacă există, "
-                                + "și înscrierile la cursuri, dacă există."
+                BorderFactory.createEmptyBorder(
+                        14, 28, 14, 28
                 )
         );
 
-        actions.add(homeButton);
+        JLabel brand = new JLabel("SALON & ACADEMIE");
+        brand.setFont(
+                new Font("SansSerif", Font.BOLD, 15)
+        );
+        brand.setForeground(WHITE);
+
+        JPanel actions = new JPanel(
+                new FlowLayout(
+                        FlowLayout.RIGHT,
+                        6,
+                        0
+                )
+        );
+        actions.setOpaque(false);
+
+        JButton profileButton =
+                createTopBarButton("Profilul meu");
+
+        profileButton.addActionListener(
+                e -> showProfile()
+        );
+
+        JButton activityButton =
+                createTopBarButton("Activitatea mea");
+
+        activityButton.addActionListener(
+                e -> showActivity()
+        );
+
+        JButton logoutButton =
+                createTopBarButton("Deconectare");
+
+        logoutButton.addActionListener(
+                e -> logout()
+        );
+
         actions.add(profileButton);
         actions.add(activityButton);
+        actions.add(logoutButton);
 
-        topBar.add(actions, BorderLayout.EAST);
+        topBar.add(
+                brand,
+                BorderLayout.WEST
+        );
+
+        topBar.add(
+                actions,
+                BorderLayout.EAST
+        );
 
         return topBar;
     }
@@ -145,65 +218,137 @@ public class ClientDashboard extends JFrame {
     private JButton createTopBarButton(String text) {
         JButton button = new JButton(text);
 
-        button.setFont(new Font("SansSerif", Font.PLAIN, 13));
+        button.setFont(
+                new Font("SansSerif", Font.PLAIN, 13)
+        );
         button.setForeground(WHITE);
         button.setBackground(INK);
         button.setContentAreaFilled(false);
         button.setBorderPainted(false);
         button.setFocusPainted(false);
         button.setCursor(
-                Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
+                Cursor.getPredefinedCursor(
+                        Cursor.HAND_CURSOR
+                )
         );
 
         return button;
     }
 
+    private JPanel wrapWithBackButton(JComponent content) {
+        JPanel wrapper = new JPanel(new BorderLayout());
+        wrapper.setBackground(CREAM);
+
+        JPanel navigation = new JPanel(
+                new FlowLayout(
+                        FlowLayout.LEFT,
+                        0,
+                        0
+                )
+        );
+        navigation.setOpaque(false);
+        navigation.setBorder(
+                BorderFactory.createEmptyBorder(
+                        16, 24, 0, 24
+                )
+        );
+
+        JButton backButton =
+                UiStyle.secondaryButton("< Înapoi");
+
+        backButton.setPreferredSize(
+                new Dimension(110, 38)
+        );
+
+        backButton.addActionListener(
+                e -> showHome()
+        );
+
+        navigation.add(backButton);
+
+        wrapper.add(
+                navigation,
+                BorderLayout.NORTH
+        );
+
+        wrapper.add(
+                content,
+                BorderLayout.CENTER
+        );
+
+        return wrapper;
+    }
+
     private JPanel createHomePanel() {
-        JPanel background = new JPanel(new GridBagLayout());
+        JPanel background =
+                new JPanel(new GridBagLayout());
+
         background.setBackground(CREAM);
         background.setBorder(
-                BorderFactory.createEmptyBorder(30, 30, 30, 30)
+                BorderFactory.createEmptyBorder(
+                        30, 30, 30, 30
+                )
         );
 
-        JPanel card = createRoundedCard();
+        RoundedCard card = new RoundedCard();
         card.setLayout(new GridBagLayout());
         card.setBorder(
-                BorderFactory.createEmptyBorder(40, 46, 40, 46)
+                BorderFactory.createEmptyBorder(
+                        40, 46, 40, 46
+                )
         );
-        card.setPreferredSize(new Dimension(520, 360));
+        card.setPreferredSize(
+                new Dimension(520, 360)
+        );
 
-        GridBagConstraints c = new GridBagConstraints();
-        c.gridx = 0;
-        c.weightx = 1;
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.anchor = GridBagConstraints.WEST;
+        GridBagConstraints c =
+                createFormConstraints();
 
-        String clientFirstName = findClientFirstName(userEmail);
+        greetingLabel.setFont(
+                new Font("SansSerif", Font.BOLD, 30)
+        );
+        greetingLabel.setForeground(INK);
 
-        String greeting = "Bine ai venit!";
-
-        if (clientFirstName != null && !clientFirstName.isBlank()) {
-            greeting = "Bine ai venit, " + clientFirstName + "!";
-        }
-
-        JLabel heading = new JLabel(greeting);
-        heading.setFont(new Font("SansSerif", Font.BOLD, 30));
-        heading.setForeground(INK);
-        addRow(card, heading, c, 0, 0, 32);
+        addRow(
+                card,
+                greetingLabel,
+                c,
+                0,
+                0,
+                32
+        );
 
         JButton appointmentsButton =
                 createMenuButton("Programări salon");
 
-        appointmentsButton.addActionListener(e -> showAppointments());
+        appointmentsButton.addActionListener(
+                e -> showAppointments()
+        );
 
-        addRow(card, appointmentsButton, c, 1, 0, 16);
+        addRow(
+                card,
+                appointmentsButton,
+                c,
+                1,
+                0,
+                16
+        );
 
         JButton coursesButton =
                 createMenuButton("Cursuri academie");
 
-        coursesButton.addActionListener(e -> showCourses());
+        coursesButton.addActionListener(
+                e -> showCourses()
+        );
 
-        addRow(card, coursesButton, c, 2, 0, 0);
+        addRow(
+                card,
+                coursesButton,
+                c,
+                2,
+                0,
+                0
+        );
 
         background.add(card);
 
@@ -211,90 +356,141 @@ public class ClientDashboard extends JFrame {
     }
 
     private JPanel createProfilePanel() {
-        JPanel background = new JPanel(new GridBagLayout());
+        JPanel page = new JPanel(new BorderLayout());
+        page.setBackground(CREAM);
+
+        JPanel background =
+                new JPanel(new GridBagLayout());
+
         background.setBackground(CREAM);
         background.setBorder(
-                BorderFactory.createEmptyBorder(24, 24, 24, 24)
+                BorderFactory.createEmptyBorder(
+                        24, 24, 24, 24
+                )
         );
 
-        JPanel card = createRoundedCard();
+        RoundedCard card = new RoundedCard();
         card.setLayout(new GridBagLayout());
         card.setBorder(
-                BorderFactory.createEmptyBorder(36, 48, 36, 48)
+                BorderFactory.createEmptyBorder(
+                        36, 48, 36, 48
+                )
         );
-        card.setPreferredSize(new Dimension(720, 640));
 
-        GridBagConstraints c = new GridBagConstraints();
-        c.gridx = 0;
-        c.weightx = 1;
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.anchor = GridBagConstraints.WEST;
+        GridBagConstraints c =
+                createFormConstraints();
 
         JLabel heading = new JLabel("Profilul meu");
-        heading.setFont(new Font("SansSerif", Font.BOLD, 30));
+        heading.setFont(
+                new Font("SansSerif", Font.BOLD, 30)
+        );
         heading.setForeground(INK);
-        addRow(card, heading, c, 0, 0, 24);
 
-        addField(card, c, 1, "Prenume", firstNameField, true);
-        addField(card, c, 3, "Nume", lastNameField, true);
-        addField(card, c, 5, "Adresă de e-mail", emailField, false);
-        addField(card, c, 7, "Telefon", phoneField, true);
+        addRow(
+                card,
+                heading,
+                c,
+                0,
+                0,
+                24
+        );
 
-        editDataButton.setFont(
-                new Font("SansSerif", Font.BOLD, 14)
+        addField(
+                card,
+                c,
+                1,
+                "Prenume",
+                firstNameField
         );
-        editDataButton.setBackground(INK);
-        editDataButton.setForeground(WHITE);
-        editDataButton.setPreferredSize(new Dimension(420, 46));
-        editDataButton.setCursor(
-                Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
-        );
-        editDataButton.addActionListener(e -> enableDataEditing());
-        addRow(card, editDataButton, c, 9, 8, 12);
 
-        saveDataButton.setFont(
-                new Font("SansSerif", Font.BOLD, 14)
+        addField(
+                card,
+                c,
+                3,
+                "Nume",
+                lastNameField
         );
-        saveDataButton.setBackground(INK);
-        saveDataButton.setForeground(WHITE);
-        saveDataButton.setPreferredSize(new Dimension(420, 46));
-        saveDataButton.setCursor(
-                Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
+
+        addField(
+                card,
+                c,
+                5,
+                "Adresă de e-mail",
+                emailField
         );
-        saveDataButton.addActionListener(e -> saveProfileData());
+
+        emailField.setEditable(false);
+
+        addField(
+                card,
+                c,
+                7,
+                "Telefon",
+                phoneField
+        );
+
+        stylePrimaryButton(editDataButton);
+        editDataButton.addActionListener(
+                e -> enableDataEditing()
+        );
+
+        addRow(
+                card,
+                editDataButton,
+                c,
+                9,
+                8,
+                12
+        );
+
+        stylePrimaryButton(saveDataButton);
+        saveDataButton.addActionListener(
+                e -> saveProfileData()
+        );
         saveDataButton.setVisible(false);
-        addRow(card, saveDataButton, c, 10, 0, 18);
 
-        profileStatusLabel.setForeground(MUTED);
-        profileStatusLabel.setFont(
-                new Font("SansSerif", Font.PLAIN, 12)
+        addRow(
+                card,
+                saveDataButton,
+                c,
+                10,
+                0,
+                18
         );
-        addRow(card, profileStatusLabel, c, 11, 0, 24);
 
-        changePasswordButton.setFont(
-                new Font("SansSerif", Font.BOLD, 14)
+        styleStatusLabel(profileStatusLabel);
+
+        addRow(
+                card,
+                profileStatusLabel,
+                c,
+                11,
+                0,
+                24
         );
-        changePasswordButton.setBackground(INK);
-        changePasswordButton.setForeground(WHITE);
-        changePasswordButton.setPreferredSize(new Dimension(420, 46));
-        changePasswordButton.setCursor(
-                Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
+
+        stylePrimaryButton(changePasswordButton);
+
+        changePasswordButton.addActionListener(
+                e -> togglePasswordSection()
         );
-        changePasswordButton.addActionListener(e ->
-                togglePasswordSection()
+
+        addRow(
+                card,
+                changePasswordButton,
+                c,
+                12,
+                0,
+                12
         );
-        addRow(card, changePasswordButton, c, 12, 0, 12);
 
         passwordPanel.setOpaque(false);
         passwordPanel.setVisible(false);
 
-        GridBagConstraints passwordConstraints = new GridBagConstraints();
-        passwordConstraints.gridx = 0;
-        passwordConstraints.weightx = 1;
-        passwordConstraints.fill = GridBagConstraints.HORIZONTAL;
-        passwordConstraints.anchor = GridBagConstraints.WEST;
+        GridBagConstraints passwordConstraints =
+                createFormConstraints();
 
-        addPasswordField(
+        addField(
                 passwordPanel,
                 passwordConstraints,
                 0,
@@ -302,7 +498,7 @@ public class ClientDashboard extends JFrame {
                 currentPasswordField
         );
 
-        addPasswordField(
+        addField(
                 passwordPanel,
                 passwordConstraints,
                 2,
@@ -310,7 +506,7 @@ public class ClientDashboard extends JFrame {
                 newPasswordField
         );
 
-        addPasswordField(
+        addField(
                 passwordPanel,
                 passwordConstraints,
                 4,
@@ -318,16 +514,12 @@ public class ClientDashboard extends JFrame {
                 confirmPasswordField
         );
 
-        savePasswordButton.setFont(
-                new Font("SansSerif", Font.BOLD, 14)
+        stylePrimaryButton(savePasswordButton);
+
+        savePasswordButton.addActionListener(
+                e -> changePassword()
         );
-        savePasswordButton.setBackground(INK);
-        savePasswordButton.setForeground(WHITE);
-        savePasswordButton.setPreferredSize(new Dimension(420, 46));
-        savePasswordButton.setCursor(
-                Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
-        );
-        savePasswordButton.addActionListener(e -> changePassword());
+
         addRow(
                 passwordPanel,
                 savePasswordButton,
@@ -337,10 +529,8 @@ public class ClientDashboard extends JFrame {
                 12
         );
 
-        passwordStatusLabel.setForeground(MUTED);
-        passwordStatusLabel.setFont(
-                new Font("SansSerif", Font.PLAIN, 12)
-        );
+        styleStatusLabel(passwordStatusLabel);
+
         addRow(
                 passwordPanel,
                 passwordStatusLabel,
@@ -350,42 +540,59 @@ public class ClientDashboard extends JFrame {
                 0
         );
 
-        addRow(card, passwordPanel, c, 13, 0, 0);
+        addRow(
+                card,
+                passwordPanel,
+                c,
+                13,
+                0,
+                0
+        );
 
-        background.add(card);
+        GridBagConstraints cardConstraints =
+                new GridBagConstraints();
 
-        return background;
+        cardConstraints.gridx = 0;
+        cardConstraints.gridy = 0;
+        cardConstraints.weightx = 1;
+        cardConstraints.anchor =
+                GridBagConstraints.NORTH;
+
+        background.add(
+                card,
+                cardConstraints
+        );
+
+        JScrollPane scroll =
+                new JScrollPane(background);
+
+        scroll.setBorder(null);
+        scroll.getViewport().setBackground(CREAM);
+        scroll.getVerticalScrollBar()
+                .setUnitIncrement(18);
+
+        scroll.setHorizontalScrollBarPolicy(
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED
+        );
+
+        page.add(
+                scroll,
+                BorderLayout.CENTER
+        );
+
+        return page;
     }
 
-    private JPanel createRoundedCard() {
-        JPanel panel = new JPanel() {
-            @Override
-            protected void paintComponent(Graphics graphics) {
-                super.paintComponent(graphics);
+    private GridBagConstraints createFormConstraints() {
+        GridBagConstraints c =
+                new GridBagConstraints();
 
-                Graphics2D g = (Graphics2D) graphics.create();
+        c.gridx = 0;
+        c.weightx = 1;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.anchor = GridBagConstraints.WEST;
 
-                g.setRenderingHint(
-                        RenderingHints.KEY_ANTIALIASING,
-                        RenderingHints.VALUE_ANTIALIAS_ON
-                );
-
-                g.setColor(WHITE);
-                g.fillRoundRect(
-                        0,
-                        0,
-                        getWidth(),
-                        getHeight(),
-                        28,
-                        28
-                );
-
-                g.dispose();
-            }
-        };
-
-        panel.setOpaque(false);
-        return panel;
+        return c;
     }
 
     private void addField(
@@ -393,41 +600,68 @@ public class ClientDashboard extends JFrame {
             GridBagConstraints constraints,
             int row,
             String labelText,
-            JTextField field,
-            boolean editable
+            JTextField field
     ) {
         JLabel label = new JLabel(labelText);
         label.setForeground(INK);
         label.setLabelFor(field);
-        addRow(panel, label, constraints, row, 0, 8);
+
+        addRow(
+                panel,
+                label,
+                constraints,
+                row,
+                0,
+                8
+        );
 
         configureField(field);
-        field.setEditable(editable);
-        addRow(panel, field, constraints, row + 1, 0, 18);
-    }
 
-    private void addPasswordField(
-            JPanel panel,
-            GridBagConstraints constraints,
-            int row,
-            String labelText,
-            JPasswordField field
-    ) {
-        JLabel label = new JLabel(labelText);
-        label.setForeground(INK);
-        label.setLabelFor(field);
-        addRow(panel, label, constraints, row, 0, 8);
-
-        configureField(field);
-        addRow(panel, field, constraints, row + 1, 0, 18);
+        addRow(
+                panel,
+                field,
+                constraints,
+                row + 1,
+                0,
+                18
+        );
     }
 
     private void configureField(JTextField field) {
-        field.setPreferredSize(new Dimension(420, 46));
+        field.setPreferredSize(
+                new Dimension(420, 46)
+        );
         field.setBackground(FIELD_BACKGROUND);
         field.setForeground(INK);
         field.setCaretColor(INK);
-        field.setMargin(new Insets(10, 14, 10, 14));
+        field.setMargin(
+                new Insets(10, 14, 10, 14)
+        );
+    }
+
+    private void stylePrimaryButton(JButton button) {
+        button.setFont(
+                new Font("SansSerif", Font.BOLD, 14)
+        );
+        button.setBackground(INK);
+        button.setForeground(WHITE);
+        button.setPreferredSize(
+                new Dimension(420, 46)
+        );
+        button.setFocusPainted(false);
+        button.setCursor(
+                Cursor.getPredefinedCursor(
+                        Cursor.HAND_CURSOR
+                )
+        );
+        button.putClientProperty("JButton.arc", 18);
+    }
+
+    private void styleStatusLabel(JLabel label) {
+        label.setForeground(MUTED);
+        label.setFont(
+                new Font("SansSerif", Font.PLAIN, 12)
+        );
     }
 
     private JButton createMenuButton(String text) {
@@ -438,11 +672,16 @@ public class ClientDashboard extends JFrame {
         );
         button.setBackground(FIELD_BACKGROUND);
         button.setForeground(INK);
-        button.setPreferredSize(new Dimension(420, 58));
-        button.setCursor(
-                Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
+        button.setPreferredSize(
+                new Dimension(420, 58)
         );
         button.setFocusPainted(false);
+        button.setCursor(
+                Cursor.getPredefinedCursor(
+                        Cursor.HAND_CURSOR
+                )
+        );
+        button.putClientProperty("JButton.arc", 18);
 
         return button;
     }
@@ -456,31 +695,71 @@ public class ClientDashboard extends JFrame {
             int bottom
     ) {
         constraints.gridy = row;
-        constraints.insets = new Insets(top, 0, bottom, 0);
-        panel.add(component, constraints);
+        constraints.insets =
+                new Insets(top, 0, bottom, 0);
+
+        panel.add(
+                component,
+                constraints
+        );
     }
 
     private void showHome() {
-        CardLayout layout = (CardLayout) contentPanel.getLayout();
-        layout.show(contentPanel, "HOME");
+        contentLayout.show(
+                contentPanel,
+                "HOME"
+        );
     }
 
     private void showProfile() {
-        CardLayout layout = (CardLayout) contentPanel.getLayout();
-        layout.show(contentPanel, "PROFILE");
+        contentLayout.show(
+                contentPanel,
+                "PROFILE"
+        );
     }
 
     private void showAppointments() {
-        CardLayout layout = (CardLayout) contentPanel.getLayout();
-        layout.show(contentPanel, "APPOINTMENTS");
+        contentLayout.show(
+                contentPanel,
+                "APPOINTMENTS"
+        );
     }
 
     private void showCourses() {
-        CardLayout layout = (CardLayout) contentPanel.getLayout();
-        layout.show(contentPanel, "COURSES");
+        contentLayout.show(
+                contentPanel,
+                "COURSES"
+        );
+    }
+
+    private void showActivity() {
+        contentLayout.show(
+                contentPanel,
+                "ACTIVITY"
+        );
+
+        activityPanel.refreshData();
+    }
+
+    private void logout() {
+        clearPasswordFields();
+
+        LoginFrame loginFrame = new LoginFrame();
+        loginFrame.setVisible(true);
+
+        dispose();
     }
 
     private void enableDataEditing() {
+        if (clientId == null) {
+            profileStatusLabel.setForeground(RED);
+            profileStatusLabel.setText(
+                    "Profilul nu este încărcat. "
+                            + "Redeschide aplicația și verifică conexiunea."
+            );
+            return;
+        }
+
         firstNameField.setEditable(true);
         lastNameField.setEditable(true);
         phoneField.setEditable(true);
@@ -494,27 +773,60 @@ public class ClientDashboard extends JFrame {
         );
     }
 
+    private void disableDataEditing() {
+        firstNameField.setEditable(false);
+        lastNameField.setEditable(false);
+        emailField.setEditable(false);
+        phoneField.setEditable(false);
+
+        editDataButton.setVisible(true);
+        saveDataButton.setVisible(false);
+    }
+
     private void saveProfileData() {
-        String firstName = firstNameField.getText().trim();
-        String lastName = lastNameField.getText().trim();
-        String phone = phoneField.getText().trim();
+        if (clientId == null) {
+            profileStatusLabel.setForeground(RED);
+            profileStatusLabel.setText(
+                    "Contul nu este asociat unui profil de client încărcat."
+            );
+            return;
+        }
+
+        String firstName =
+                firstNameField.getText().trim();
+
+        String lastName =
+                lastNameField.getText().trim();
+
+        String phone =
+                phoneField.getText().trim();
 
         if (firstName.isEmpty()
                 || lastName.isEmpty()
                 || phone.isEmpty()) {
 
-            profileStatusLabel.setForeground(new Color(160, 45, 45));
+            profileStatusLabel.setForeground(RED);
             profileStatusLabel.setText(
                     "Completează prenumele, numele și telefonul."
             );
             return;
         }
 
-        if (!phone.matches("[0-9+\\s-]{6,20}")) {
-            profileStatusLabel.setForeground(new Color(160, 45, 45));
+        if (firstName.length() > 50
+                || lastName.length() > 50) {
+
+            profileStatusLabel.setForeground(RED);
             profileStatusLabel.setText(
-                    "Numărul de telefon poate conține doar cifre, "
-                            + "spații, cratime și prefixul +."
+                    "Prenumele și numele pot avea maximum 50 de caractere."
+            );
+            return;
+        }
+
+        if (!phone.matches("[0-9+\\s-]{6,20}")) {
+            profileStatusLabel.setForeground(RED);
+            profileStatusLabel.setText(
+                    "Telefonul trebuie să conțină 6–20 caractere: "
+                            + "cifre, spații, cratime sau +."
             );
             return;
         }
@@ -522,7 +834,7 @@ public class ClientDashboard extends JFrame {
         String sql = """
                 UPDATE client
                 SET prenume = ?, nume = ?, telefon = ?
-                WHERE email = ?
+                WHERE id_client = ?
                 """;
 
         try (
@@ -535,64 +847,54 @@ public class ClientDashboard extends JFrame {
             statement.setString(1, firstName);
             statement.setString(2, lastName);
             statement.setString(3, phone);
-            statement.setString(4, userEmail);
+            statement.setInt(4, clientId);
 
-            int updatedRows = statement.executeUpdate();
+            statement.executeUpdate();
 
-            if (updatedRows > 0) {
-                profileStatusLabel.setForeground(
-                        new Color(55, 110, 70)
-                );
-                profileStatusLabel.setText(
-                        "Datele profilului au fost actualizate."
-                );
+            greetingLabel.setText(
+                    "Bine ai venit, " + firstName + "!"
+            );
 
-                disableDataEditing();
-            } else {
-                profileStatusLabel.setForeground(new Color(160, 45, 45));
-                profileStatusLabel.setText(
-                        "Datele profilului nu au putut fi actualizate."
-                );
-            }
+            disableDataEditing();
+
+            profileStatusLabel.setForeground(GREEN);
+            profileStatusLabel.setText(
+                    "Datele profilului au fost salvate."
+            );
 
         } catch (SQLException exception) {
             exception.printStackTrace();
 
-            profileStatusLabel.setForeground(new Color(160, 45, 45));
-            profileStatusLabel.setText(
-                    "Datele profilului nu au putut fi actualizate."
-            );
+            profileStatusLabel.setForeground(RED);
+
+            if (exception.getErrorCode() == 1062) {
+                profileStatusLabel.setText(
+                        "Numărul de telefon este deja folosit."
+                );
+            } else {
+                profileStatusLabel.setText(
+                        "Datele profilului nu au putut fi salvate."
+                );
+            }
         }
     }
 
-    private void disableDataEditing() {
-        firstNameField.setEditable(false);
-        lastNameField.setEditable(false);
-        phoneField.setEditable(false);
-
-        editDataButton.setVisible(true);
-        saveDataButton.setVisible(false);
-    }
-
     private void togglePasswordSection() {
-        boolean isVisible = passwordPanel.isVisible();
+        boolean show =
+                !passwordPanel.isVisible();
 
-        passwordPanel.setVisible(!isVisible);
+        passwordPanel.setVisible(show);
 
-        if (!isVisible) {
-            changePasswordButton.setText(
-                    "Ascunde schimbarea parolei"
-            );
+        changePasswordButton.setText(
+                show
+                        ? "Ascunde schimbarea parolei"
+                        : "Doresc să-mi modific parola"
+        );
 
-            passwordStatusLabel.setText(" ");
-        } else {
-            changePasswordButton.setText(
-                    "Doresc să-mi modific parola"
-            );
+        passwordStatusLabel.setText(" ");
 
-            currentPasswordField.setText("");
-            newPasswordField.setText("");
-            confirmPasswordField.setText("");
+        if (!show) {
+            clearPasswordFields();
         }
 
         revalidate();
@@ -600,9 +902,14 @@ public class ClientDashboard extends JFrame {
     }
 
     private void changePassword() {
-        char[] currentPassword = currentPasswordField.getPassword();
-        char[] newPassword = newPasswordField.getPassword();
-        char[] confirmPassword = confirmPasswordField.getPassword();
+        char[] currentPassword =
+                currentPasswordField.getPassword();
+
+        char[] newPassword =
+                newPasswordField.getPassword();
+
+        char[] confirmPassword =
+                confirmPasswordField.getPassword();
 
         if (currentPassword.length == 0
                 || newPassword.length == 0
@@ -614,22 +921,23 @@ public class ClientDashboard extends JFrame {
                     confirmPassword
             );
 
-            passwordStatusLabel.setForeground(new Color(160, 45, 45));
-            passwordStatusLabel.setText(
+            showPasswordError(
                     "Completează toate câmpurile pentru parolă."
             );
             return;
         }
 
-        if (!Arrays.equals(newPassword, confirmPassword)) {
+        if (!Arrays.equals(
+                newPassword,
+                confirmPassword
+        )) {
             clearPasswords(
                     currentPassword,
                     newPassword,
                     confirmPassword
             );
 
-            passwordStatusLabel.setForeground(new Color(160, 45, 45));
-            passwordStatusLabel.setText(
+            showPasswordError(
                     "Parola nouă și confirmarea ei nu coincid."
             );
             return;
@@ -642,21 +950,25 @@ public class ClientDashboard extends JFrame {
                     confirmPassword
             );
 
-            passwordStatusLabel.setForeground(new Color(160, 45, 45));
-            passwordStatusLabel.setText(
+            showPasswordError(
                     "Parola nouă trebuie să aibă cel puțin 6 caractere."
             );
             return;
         }
 
         setPasswordBusy(true);
-        passwordStatusLabel.setForeground(MUTED);
-        passwordStatusLabel.setText("Se actualizează parola...");
 
-        SwingWorker<String, Void> worker = new SwingWorker<>() {
+        passwordStatusLabel.setForeground(MUTED);
+        passwordStatusLabel.setText(
+                "Se actualizează parola..."
+        );
+
+        new SwingWorker<String, Void>() {
 
             @Override
-            protected String doInBackground() throws Exception {
+            protected String doInBackground()
+                    throws Exception {
+
                 try {
                     return updatePassword(
                             currentPassword,
@@ -675,44 +987,38 @@ public class ClientDashboard extends JFrame {
             protected void done() {
                 setPasswordBusy(false);
 
+                if (!isDisplayable()) {
+                    return;
+                }
+
                 try {
                     String result = get();
 
-                    if ("CURRENT_PASSWORD_INCORRECT".equals(result)) {
-                        passwordStatusLabel.setForeground(
-                                new Color(160, 45, 45)
-                        );
-                        passwordStatusLabel.setText(
+                    if ("CURRENT_PASSWORD_INCORRECT"
+                            .equals(result)) {
+
+                        showPasswordError(
                                 "Parola actuală este incorectă."
                         );
                         return;
                     }
 
-                    passwordStatusLabel.setForeground(
-                            new Color(55, 110, 70)
-                    );
+                    clearPasswordFields();
+
+                    passwordStatusLabel.setForeground(GREEN);
                     passwordStatusLabel.setText(
                             "Parola a fost schimbată cu succes."
                     );
 
-                    currentPasswordField.setText("");
-                    newPasswordField.setText("");
-                    confirmPasswordField.setText("");
-
                 } catch (Exception exception) {
-                    passwordStatusLabel.setForeground(
-                            new Color(160, 45, 45)
-                    );
-                    passwordStatusLabel.setText(
+                    exception.printStackTrace();
+
+                    showPasswordError(
                             "Parola nu a putut fi schimbată."
                     );
-
-                    exception.printStackTrace();
                 }
             }
-        };
-
-        worker.execute();
+        }.execute();
     }
 
     private String updatePassword(
@@ -720,34 +1026,74 @@ public class ClientDashboard extends JFrame {
             char[] newPassword
     ) throws Exception {
 
-        String currentHash = hashPassword(currentPassword);
-        String newHash = hashPassword(newPassword);
+        String currentHash =
+                hashPassword(currentPassword);
 
-        String sql = """
-                UPDATE utilizator
-                SET parola = ?
-                WHERE email = ? AND parola = ?
-                """;
+        String newHash =
+                hashPassword(newPassword);
 
         try (
                 Connection connection =
-                        DatabaseConnection.getConnection();
-
-                PreparedStatement statement =
-                        connection.prepareStatement(sql)
+                        DatabaseConnection.getConnection()
         ) {
-            statement.setString(1, newHash);
-            statement.setString(2, userEmail);
-            statement.setString(3, currentHash);
+            String checkSql = """
+                    SELECT id_utilizator
+                    FROM utilizator
+                    WHERE email = ?
+                      AND parola = ?
+                    """;
 
-            int updatedRows = statement.executeUpdate();
+            int userId;
 
-            if (updatedRows == 0) {
-                return "CURRENT_PASSWORD_INCORRECT";
+            try (
+                    PreparedStatement statement =
+                            connection.prepareStatement(checkSql)
+            ) {
+                statement.setString(1, userEmail);
+                statement.setString(2, currentHash);
+
+                try (
+                        ResultSet result =
+                                statement.executeQuery()
+                ) {
+                    if (!result.next()) {
+                        return "CURRENT_PASSWORD_INCORRECT";
+                    }
+
+                    userId =
+                            result.getInt("id_utilizator");
+                }
             }
 
-            return "SUCCESS";
+            String updateSql = """
+                    UPDATE utilizator
+                    SET parola = ?
+                    WHERE id_utilizator = ?
+                      AND parola = ?
+                    """;
+
+            try (
+                    PreparedStatement statement =
+                            connection.prepareStatement(updateSql)
+            ) {
+                statement.setString(1, newHash);
+                statement.setInt(2, userId);
+                statement.setString(3, currentHash);
+
+                int updated =
+                        statement.executeUpdate();
+
+                if (updated == 0
+                        && !newHash.equals(currentHash)) {
+
+                    throw new SQLException(
+                            "Parola a fost modificată între timp."
+                    );
+                }
+            }
         }
+
+        return "SUCCESS";
     }
 
     private void setPasswordBusy(boolean busy) {
@@ -755,62 +1101,38 @@ public class ClientDashboard extends JFrame {
         currentPasswordField.setEnabled(!busy);
         newPasswordField.setEnabled(!busy);
         confirmPasswordField.setEnabled(!busy);
+        changePasswordButton.setEnabled(!busy);
 
         savePasswordButton.setText(
-                busy ? "Se actualizează..." : "Salvează parola nouă"
+                busy
+                        ? "Se actualizează..."
+                        : "Salvează parola nouă"
         );
     }
 
-    private void clearPasswords(
-            char[] currentPassword,
-            char[] newPassword,
-            char[] confirmPassword
-    ) {
-        if (currentPassword != null) {
-            Arrays.fill(currentPassword, '\0');
-        }
-
-        if (newPassword != null) {
-            Arrays.fill(newPassword, '\0');
-        }
-
-        if (confirmPassword != null) {
-            Arrays.fill(confirmPassword, '\0');
-        }
+    private void showPasswordError(String message) {
+        passwordStatusLabel.setForeground(RED);
+        passwordStatusLabel.setText(message);
     }
 
-    private String findClientFirstName(String email) {
-        String sql = """
-                SELECT prenume
-                FROM client
-                WHERE email = ?
-                """;
+    private void clearPasswordFields() {
+        currentPasswordField.setText("");
+        newPasswordField.setText("");
+        confirmPasswordField.setText("");
+    }
 
-        try (
-                Connection connection =
-                        DatabaseConnection.getConnection();
-
-                PreparedStatement statement =
-                        connection.prepareStatement(sql)
-        ) {
-            statement.setString(1, email);
-
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    return resultSet.getString("prenume");
-                }
+    private void clearPasswords(char[]... passwords) {
+        for (char[] password : passwords) {
+            if (password != null) {
+                Arrays.fill(password, '\0');
             }
-
-        } catch (SQLException exception) {
-            exception.printStackTrace();
         }
-
-        return null;
     }
 
     private void loadProfileData() {
         String sql = """
                 SELECT
+                    c.id_client,
                     c.prenume,
                     c.nume,
                     c.email,
@@ -830,22 +1152,47 @@ public class ClientDashboard extends JFrame {
         ) {
             statement.setString(1, userEmail);
 
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    firstNameField.setText(
-                            resultSet.getString("prenume")
-                    );
+            try (
+                    ResultSet result =
+                            statement.executeQuery()
+            ) {
+                if (!result.next()) {
+                    clientId = null;
 
-                    lastNameField.setText(
-                            resultSet.getString("nume")
+                    profileStatusLabel.setForeground(RED);
+                    profileStatusLabel.setText(
+                            "Contul nu este asociat unui client."
                     );
+                    return;
+                }
 
-                    emailField.setText(
-                            resultSet.getString("email")
-                    );
+                clientId =
+                        result.getInt("id_client");
 
-                    phoneField.setText(
-                            resultSet.getString("telefon")
+                String firstName =
+                        result.getString("prenume");
+
+                firstNameField.setText(firstName);
+
+                lastNameField.setText(
+                        result.getString("nume")
+                );
+
+                emailField.setText(
+                        result.getString("email")
+                );
+
+                phoneField.setText(
+                        result.getString("telefon")
+                );
+
+                if (firstName != null
+                        && !firstName.isBlank()) {
+
+                    greetingLabel.setText(
+                            "Bine ai venit, "
+                                    + firstName
+                                    + "!"
                     );
                 }
             }
@@ -853,48 +1200,53 @@ public class ClientDashboard extends JFrame {
         } catch (SQLException exception) {
             exception.printStackTrace();
 
-            profileStatusLabel.setForeground(new Color(160, 45, 45));
+            clientId = null;
+
+            profileStatusLabel.setForeground(RED);
             profileStatusLabel.setText(
                     "Datele profilului nu au putut fi încărcate."
             );
         }
     }
 
-    private void showMessage(
-            String title,
-            String message
-    ) {
-        JOptionPane.showMessageDialog(
-                this,
-                message,
-                title,
-                JOptionPane.INFORMATION_MESSAGE
-        );
-    }
+    // Compatibilitate cu autentificarea existentă.
+    private String hashPassword(char[] password)
+            throws Exception {
 
-    // Compatibilitate temporară cu autentificarea actuală.
-    // Se va înlocui înainte de utilizarea unor parole reale.
-    private String hashPassword(char[] password) throws Exception {
         MessageDigest digest =
                 MessageDigest.getInstance("SHA-256");
 
         byte[] passwordBytes =
-                new String(password).getBytes(StandardCharsets.UTF_8);
+                new String(password).getBytes(
+                        StandardCharsets.UTF_8
+                );
 
         byte[] hashedBytes;
 
         try {
-            hashedBytes = digest.digest(passwordBytes);
+            hashedBytes =
+                    digest.digest(passwordBytes);
         } finally {
             Arrays.fill(passwordBytes, (byte) 0);
         }
 
-        StringBuilder builder = new StringBuilder();
+        try {
+            StringBuilder builder =
+                    new StringBuilder();
 
-        for (byte value : hashedBytes) {
-            builder.append(String.format("%02x", value & 0xff));
+            for (byte value : hashedBytes) {
+                builder.append(
+                        String.format(
+                                "%02x",
+                                value & 0xff
+                        )
+                );
+            }
+
+            return builder.toString();
+
+        } finally {
+            Arrays.fill(hashedBytes, (byte) 0);
         }
-
-        return builder.toString();
     }
 }

@@ -274,3 +274,34 @@ CREATE TABLE utilizator (
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
+
+USE proiect_salon;
+
+CREATE TABLE configurare_zi_tehnician (
+    id_tehnician INT UNSIGNED NOT NULL,
+    data DATE NOT NULL,
+    tip_zi ENUM('Lucru', 'Libera') NOT NULL,
+
+    PRIMARY KEY (id_tehnician, data),
+
+    CONSTRAINT fk_config_zi_tehnician
+        FOREIGN KEY (id_tehnician)
+        REFERENCES tehnician (id_angajat)
+) ENGINE=InnoDB
+  DEFAULT CHARSET=utf8mb4
+  COLLATE=utf8mb4_unicode_ci;
+
+
+CREATE TABLE serviciu_zi_tehnician (
+    id_tehnician INT UNSIGNED NOT NULL,
+    data DATE NOT NULL,
+    id_serviciu INT UNSIGNED NOT NULL,
+
+    PRIMARY KEY (id_tehnician, data, id_serviciu),
+
+    KEY idx_serviciu_zi_oferta (
+        id_tehnician,
+        id_serviciu
+    ) ENGINE=InnoDB
+  DEFAULT CHARSET=utf8mb4
+  COLLATE=utf8mb4_unicode_ci;

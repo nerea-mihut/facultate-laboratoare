@@ -1,0 +1,108 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Page-1" id="rQNZceCppn2aR8QiZJiw">
+    <mxGraphModel dx="1403" dy="562" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" background="light-dark(#ffffff, #121212)" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <UserObject label="" plantUmlData="{&#xa;  &quot;data&quot;: &quot;@startuml\ntitle Diagrama de Desfășurare — Infrastructura Fizică a Sistemului\n\nleft to right direction\n\nnode \&quot;Stație de Lucru Client / Salon\\n&lt;&lt;device&gt;&gt;\\n(PC / Laptop Windows / macOS)\&quot; as ClientPC {\n  node \&quot;Java Runtime Environment (JRE 17+)\\n&lt;&lt;executionEnvironment&gt;&gt;\&quot; as JVM {\n    artifact \&quot;SalonAcademie.jar\\n&lt;&lt;artifact&gt;&gt;\\n(pachetele salon, salon.ui, salon.db)\&quot; as AppJar\n    artifact \&quot;swing-flatlaf.jar\\n&lt;&lt;artifact&gt;&gt;\&quot; as SwingJar\n    artifact \&quot;mariadb-java-client.jar\\n&lt;&lt;artifact&gt;&gt;\&quot; as JdbcJar\n  }\n  folder \&quot;Sistem de Fișiere Local\\n(documents/)\\n&lt;&lt;artifact&gt;&gt;\&quot; as DocsDir\n}\n\nnode \&quot;Server Bază de Date\\n&lt;&lt;device&gt;&gt;\\n(Localhost / Server Dedicat)\&quot; as DBServer {\n  node \&quot;MariaDB Server (InnoDB)\\n&lt;&lt;executionEnvironment&gt;&gt;\&quot; as MariaEngine {\n    database \&quot;proiect_salon\\n&lt;&lt;database&gt;&gt;\\n(21 tabele relaționale, utf8mb4)\&quot; as DBInstance\n  }\n}\n\nAppJar ..&gt; SwingJar : &lt;&lt;manifest&gt;&gt;\nAppJar ..&gt; JdbcJar : &lt;&lt;manifest&gt;&gt;\nAppJar -- DocsDir : Local File I/O\\n(salvare documente curs)\nJdbcJar -- MariaEngine : JDBC / TCP-IP\\n(port 3306)\n@enduml&quot;,&#xa;  &quot;config&quot;: null&#xa;}" id="G3mg62c5Cy6k1maKi8Qf-277">
+          <mxCell connectable="0" parent="1" style="group;transparentBounds=1;editIcon=1;lockedGroup=0;groupPadding=10;" vertex="1">
+            <mxGeometry as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="Stație de Lucru Client / Salon&#xa;«device»&#xa;(PC / Laptop Windows / macOS)" plantUmlId="c_0" plantUmlBaseStyle="shape=cube;size=10;flipH=1;fillColor=none;strokeColor=#181818;verticalAlign=top;align=center;spacingTop=7;spacingRight=10;fontSize=14;fontStyle=1;whiteSpace=wrap;" plantUmlBaseValue="Stație de Lucru Client / Salon&#xa;«device»&#xa;(PC / Laptop Windows / macOS)" id="G3mg62c5Cy6k1maKi8Qf-278">
+          <mxCell parent="G3mg62c5Cy6k1maKi8Qf-277" style="shape=cube;size=10;flipH=1;fillColor=none;strokeColor=#181818;verticalAlign=top;align=center;spacingTop=7;spacingRight=10;fontSize=14;fontStyle=1;whiteSpace=wrap;" vertex="1">
+            <mxGeometry height="404" width="810" x="70" y="50" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="Java Runtime Environment (JRE 17+)&#xa;«executionEnvironment»" plantUmlId="c_1" plantUmlBaseStyle="shape=cube;size=10;flipH=1;fillColor=none;strokeColor=#181818;verticalAlign=top;align=center;spacingTop=7;spacingRight=10;fontSize=14;fontStyle=1;whiteSpace=wrap;" plantUmlBaseValue="Java Runtime Environment (JRE 17+)&#xa;«executionEnvironment»" id="G3mg62c5Cy6k1maKi8Qf-279">
+          <mxCell parent="G3mg62c5Cy6k1maKi8Qf-278" style="shape=cube;size=10;flipH=1;fillColor=none;strokeColor=#181818;verticalAlign=top;align=center;spacingTop=7;spacingRight=10;fontSize=14;fontStyle=1;whiteSpace=wrap;" vertex="1">
+            <mxGeometry height="291.5598705501618" width="542.741116751269" x="20.558375634517766" y="91.5201294498382" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="SalonAcademie.jar&#xa;«artifact»&#xa;(pachetele salon, salon.ui, salon.db)" plantUmlId="n_2" plantUmlBaseStyle="rounded=1;absoluteArcSize=1;arcSize=5;fillColor=#F1F1F1;strokeColor=#181818;fontSize=14;whiteSpace=wrap;spacingRight=10;spacingTop=2;" plantUmlBaseValue="SalonAcademie.jar&#xa;«artifact»&#xa;(pachetele salon, salon.ui, salon.db)" id="G3mg62c5Cy6k1maKi8Qf-280">
+          <mxCell parent="G3mg62c5Cy6k1maKi8Qf-279" style="rounded=1;absoluteArcSize=1;arcSize=5;fillColor=#F1F1F1;strokeColor=#181818;fontSize=14;whiteSpace=wrap;spacingRight=10;spacingTop=2;" vertex="1">
+            <mxGeometry height="81.06148867313917" width="272.3984771573604" x="15.418781725888325" y="130.74433656957927" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="" plantUmlId="ci_3" plantUmlBaseStyle="shape=note;size=6;fillColor=#F1F1F1;strokeColor=#181818;strokeWidth=0.5;part=1;" plantUmlBaseValue="" id="G3mg62c5Cy6k1maKi8Qf-281">
+          <mxCell parent="G3mg62c5Cy6k1maKi8Qf-280" style="shape=note;size=6;fillColor=#F1F1F1;strokeColor=#181818;strokeWidth=0.5;part=1;" vertex="1">
+            <mxGeometry height="14" relative="1" width="12" x="1" as="geometry">
+              <mxPoint x="-17" y="5" as="offset" />
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="swing-flatlaf.jar&#xa;«artifact»" plantUmlId="n_4" plantUmlBaseStyle="rounded=1;absoluteArcSize=1;arcSize=5;fillColor=#F1F1F1;strokeColor=#181818;fontSize=14;whiteSpace=wrap;spacingRight=10;spacingTop=2;" plantUmlBaseValue="swing-flatlaf.jar&#xa;«artifact»" id="G3mg62c5Cy6k1maKi8Qf-282">
+          <mxCell parent="G3mg62c5Cy6k1maKi8Qf-279" style="rounded=1;absoluteArcSize=1;arcSize=5;fillColor=#F1F1F1;strokeColor=#181818;fontSize=14;whiteSpace=wrap;spacingRight=10;spacingTop=2;" vertex="1">
+            <mxGeometry height="60.14239482200647" width="141.85279187817258" x="349.49238578680206" y="71.90938511326861" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="" plantUmlId="ci_5" plantUmlBaseStyle="shape=note;size=6;fillColor=#F1F1F1;strokeColor=#181818;strokeWidth=0.5;part=1;" plantUmlBaseValue="" id="G3mg62c5Cy6k1maKi8Qf-283">
+          <mxCell parent="G3mg62c5Cy6k1maKi8Qf-282" style="shape=note;size=6;fillColor=#F1F1F1;strokeColor=#181818;strokeWidth=0.5;part=1;" vertex="1">
+            <mxGeometry height="14" relative="1" width="12" x="1" as="geometry">
+              <mxPoint x="-17" y="5" as="offset" />
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="mariadb-java-client.jar&#xa;«artifact»" plantUmlId="n_6" plantUmlBaseStyle="rounded=1;absoluteArcSize=1;arcSize=5;fillColor=#F1F1F1;strokeColor=#181818;fontSize=14;whiteSpace=wrap;spacingRight=10;spacingTop=2;" plantUmlBaseValue="mariadb-java-client.jar&#xa;«artifact»" id="G3mg62c5Cy6k1maKi8Qf-284">
+          <mxCell parent="G3mg62c5Cy6k1maKi8Qf-279" style="rounded=1;absoluteArcSize=1;arcSize=5;fillColor=#F1F1F1;strokeColor=#181818;fontSize=14;whiteSpace=wrap;spacingRight=10;spacingTop=2;" vertex="1">
+            <mxGeometry height="60.14239482200647" width="193.248730964467" x="323.79441624365484" y="210.49838187702267" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="" plantUmlId="ci_7" plantUmlBaseStyle="shape=note;size=6;fillColor=#F1F1F1;strokeColor=#181818;strokeWidth=0.5;part=1;" plantUmlBaseValue="" id="G3mg62c5Cy6k1maKi8Qf-285">
+          <mxCell parent="G3mg62c5Cy6k1maKi8Qf-284" style="shape=note;size=6;fillColor=#F1F1F1;strokeColor=#181818;strokeWidth=0.5;part=1;" vertex="1">
+            <mxGeometry height="14" relative="1" width="12" x="1" as="geometry">
+              <mxPoint x="-17" y="5" as="offset" />
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="«manifest»" plantUmlId="e_12" plantUmlBaseStyle="strokeColor=#181818;fontColor=#000000;fontSize=13;html=1;labelBackgroundColor=#FFFFFF;verticalAlign=bottom;endArrow=classicThin;endFill=1;dashed=1;dashPattern=7 7;curved=0;rounded=0;endSize=6;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" plantUmlBaseValue="«manifest»" id="G3mg62c5Cy6k1maKi8Qf-290">
+          <mxCell edge="1" parent="G3mg62c5Cy6k1maKi8Qf-279" source="G3mg62c5Cy6k1maKi8Qf-280" style="strokeColor=#181818;fontColor=#000000;fontSize=13;html=1;labelBackgroundColor=#FFFFFF;verticalAlign=bottom;endArrow=classicThin;endFill=1;dashed=1;dashPattern=7 7;curved=0;rounded=0;endSize=6;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" target="G3mg62c5Cy6k1maKi8Qf-282">
+            <mxGeometry relative="1" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="«manifest»" plantUmlId="e_13" plantUmlBaseStyle="strokeColor=#181818;fontColor=#000000;fontSize=13;html=1;labelBackgroundColor=#FFFFFF;verticalAlign=bottom;endArrow=classicThin;endFill=1;dashed=1;dashPattern=7 7;curved=0;rounded=0;endSize=6;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" plantUmlBaseValue="«manifest»" id="G3mg62c5Cy6k1maKi8Qf-291">
+          <mxCell edge="1" parent="G3mg62c5Cy6k1maKi8Qf-279" source="G3mg62c5Cy6k1maKi8Qf-280" style="strokeColor=#181818;fontColor=#000000;fontSize=13;html=1;labelBackgroundColor=#FFFFFF;verticalAlign=bottom;endArrow=classicThin;endFill=1;dashed=1;dashPattern=7 7;curved=0;rounded=0;endSize=6;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" target="G3mg62c5Cy6k1maKi8Qf-284">
+            <mxGeometry relative="1" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="Sistem de Fișiere Local&#xa;(documents/)&#xa;«artifact»" plantUmlId="n_8" plantUmlBaseStyle="shape=folder;tabWidth=159;tabHeight=21;tabPosition=left;html=1;whiteSpace=wrap;fillColor=#F1F1F1;strokeColor=#181818;fontSize=14;align=center;verticalAlign=middle;spacingTop=21;" plantUmlBaseValue="Sistem de Fișiere Local&#xa;(documents/)&#xa;«artifact»" id="G3mg62c5Cy6k1maKi8Qf-286">
+          <mxCell parent="G3mg62c5Cy6k1maKi8Qf-278" style="shape=folder;tabWidth=159;tabHeight=21;tabPosition=left;html=1;whiteSpace=wrap;fillColor=#F1F1F1;strokeColor=#181818;fontSize=14;align=center;verticalAlign=middle;spacingTop=21;" vertex="1">
+            <mxGeometry height="81.06148867313917" width="190.16497461928935" x="599.9970558375635" y="222.26022653721685" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="Local File I/O&#xa;(salvare documente curs)" plantUmlId="e_14" plantUmlBaseStyle="strokeColor=#181818;fontColor=#000000;fontSize=13;html=1;labelBackgroundColor=#FFFFFF;verticalAlign=bottom;endArrow=none;curved=0;rounded=0;endSize=6;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" plantUmlBaseValue="Local File I/O&#xa;(salvare documente curs)" id="G3mg62c5Cy6k1maKi8Qf-292">
+          <mxCell edge="1" parent="G3mg62c5Cy6k1maKi8Qf-278" source="G3mg62c5Cy6k1maKi8Qf-280" style="strokeColor=#181818;fontColor=#000000;fontSize=13;html=1;labelBackgroundColor=#FFFFFF;verticalAlign=bottom;endArrow=none;curved=0;rounded=0;endSize=6;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" target="G3mg62c5Cy6k1maKi8Qf-286">
+            <mxGeometry relative="1" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="Server Bază de Date&#xa;«device»&#xa;(Localhost / Server Dedicat)" plantUmlId="c_9" plantUmlBaseStyle="shape=cube;size=10;flipH=1;fillColor=none;strokeColor=#181818;verticalAlign=top;align=center;spacingTop=7;spacingRight=10;fontSize=14;fontStyle=1;whiteSpace=wrap;" plantUmlBaseValue="Server Bază de Date&#xa;«device»&#xa;(Localhost / Server Dedicat)" id="G3mg62c5Cy6k1maKi8Qf-287">
+          <mxCell parent="G3mg62c5Cy6k1maKi8Qf-277" style="shape=cube;size=10;flipH=1;fillColor=none;strokeColor=#181818;verticalAlign=top;align=center;spacingTop=7;spacingRight=10;fontSize=14;fontStyle=1;whiteSpace=wrap;" vertex="1">
+            <mxGeometry height="219" width="307" x="1050" y="245" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="MariaDB Server (InnoDB)&#xa;«executionEnvironment»" plantUmlId="c_10" plantUmlBaseStyle="shape=cube;size=10;flipH=1;fillColor=none;strokeColor=#181818;verticalAlign=top;align=center;spacingTop=7;spacingRight=10;fontSize=14;fontStyle=1;whiteSpace=wrap;" plantUmlBaseValue="MariaDB Server (InnoDB)&#xa;«executionEnvironment»" id="G3mg62c5Cy6k1maKi8Qf-288">
+          <mxCell parent="G3mg62c5Cy6k1maKi8Qf-287" style="shape=cube;size=10;flipH=1;fillColor=none;strokeColor=#181818;verticalAlign=top;align=center;spacingTop=7;spacingRight=10;fontSize=14;fontStyle=1;whiteSpace=wrap;" vertex="1">
+            <mxGeometry height="133" width="267" x="15" y="70" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="proiect_salon&#xa;«database»&#xa;(21 tabele relaționale, utf8mb4)" plantUmlId="n_11" plantUmlBaseStyle="shape=cylinder3;size=10;boundedLbl=1;backgroundOutline=1;fillColor=#F1F1F1;strokeColor=#181818;fontSize=14;whiteSpace=wrap;" plantUmlBaseValue="proiect_salon&#xa;«database»&#xa;(21 tabele relaționale, utf8mb4)" id="G3mg62c5Cy6k1maKi8Qf-289">
+          <mxCell parent="G3mg62c5Cy6k1maKi8Qf-288" style="shape=cylinder3;size=10;boundedLbl=1;backgroundOutline=1;fillColor=#F1F1F1;strokeColor=#181818;fontSize=14;whiteSpace=wrap;" vertex="1">
+            <mxGeometry height="62" width="227" x="15" y="55" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="JDBC / TCP-IP&#xa;(port 3306)" plantUmlId="e_15" plantUmlBaseStyle="strokeColor=#181818;fontColor=#000000;fontSize=13;html=1;labelBackgroundColor=#FFFFFF;verticalAlign=bottom;endArrow=none;curved=0;rounded=0;endSize=6;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" plantUmlBaseValue="JDBC / TCP-IP&#xa;(port 3306)" id="G3mg62c5Cy6k1maKi8Qf-293">
+          <mxCell edge="1" parent="G3mg62c5Cy6k1maKi8Qf-277" source="G3mg62c5Cy6k1maKi8Qf-284" style="strokeColor=#181818;fontColor=#000000;fontSize=13;html=1;labelBackgroundColor=#FFFFFF;verticalAlign=bottom;endArrow=none;curved=0;rounded=0;endSize=6;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;" target="G3mg62c5Cy6k1maKi8Qf-288">
+            <mxGeometry relative="1" x="0.4972" y="12" as="geometry">
+              <mxPoint as="offset" />
+            </mxGeometry>
+          </mxCell>
+        </UserObject>
+        <UserObject label="Diagrama de Desfășurare — Infrastructura Fizică a Sistemului" plantUmlId="title_16" plantUmlBaseStyle="text;html=1;fillColor=none;strokeColor=none;fontSize=14;fontStyle=1;fontColor=#000000;align=center;verticalAlign=middle;" plantUmlBaseValue="Diagrama de Desfășurare — Infrastructura Fizică a Sistemului" id="G3mg62c5Cy6k1maKi8Qf-294">
+          <mxCell parent="G3mg62c5Cy6k1maKi8Qf-277" style="text;html=1;fillColor=none;strokeColor=none;fontSize=14;fontStyle=1;fontColor=#000000;align=center;verticalAlign=middle;" vertex="1">
+            <mxGeometry height="24" width="448" x="431" y="30" as="geometry" />
+          </mxCell>
+        </UserObject>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

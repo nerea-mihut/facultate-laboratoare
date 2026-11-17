@@ -12,6 +12,7 @@ obiecte = [
     (2, 15),
     (20, 20),
     (12, 6)
+
 ]
 
 #setarile/parametrii algoritmului

@@ -374,6 +374,28 @@ public class LoginFrame extends JFrame {
             return;
         }
 
+        if ("Tehnician".equals(role)) {
+            TechnicianDashboard technicianDashboard =
+                    new TechnicianDashboard(email);
+
+            technicianDashboard.setVisible(true);
+            dispose();
+
+            return;
+        }
+
+        if ("Trainer".equals(role)) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Interfața trainerului va fi implementată "
+                            + "în pasul următor.",
+                    "Autentificare reușită",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+
+            return;
+        }
+
         JOptionPane.showMessageDialog(
                 this,
                 "Bine ai venit!\nRolul contului: " + role

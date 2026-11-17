@@ -235,3 +235,24 @@ ALTER TABLE utilizator
     ADD CONSTRAINT fk_utilizator_angajat
     FOREIGN KEY (id_angajat)
     REFERENCES angajat (id_angajat);
+
+ALTER TABLE serviciu_zi_tehnician
+    ADD CONSTRAINT fk_serviciu_zi_config
+        FOREIGN KEY (id_tehnician, data)
+        REFERENCES configurare_zi_tehnician (
+            id_tehnician,
+            data
+        )
+        ON DELETE CASCADE,
+
+    ADD CONSTRAINT fk_serviciu_zi_oferta
+        FOREIGN KEY (id_tehnician, id_serviciu)
+        REFERENCES tehnician_serviciu (
+            id_tehnician,
+            id_serviciu
+        );
+
+ALTER TABLE configurare_zi_tehnician
+    ADD CONSTRAINT fk_config_zi_tehnician
+        FOREIGN KEY (id_tehnician)
+        REFERENCES tehnician (id_angajat);
