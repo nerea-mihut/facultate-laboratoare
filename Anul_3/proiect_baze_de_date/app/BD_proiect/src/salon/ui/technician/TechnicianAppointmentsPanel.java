@@ -22,6 +22,7 @@ public class TechnicianAppointmentsPanel extends JPanel {
 
     private final AppointmentService appointmentService;
     private final TechnicianService technicianService;
+    private final Runnable onBack;
 
     private final JPanel appointmentsPanel =
             new JPanel();
@@ -34,6 +35,15 @@ public class TechnicianAppointmentsPanel extends JPanel {
             AppointmentService appointmentService,
             TechnicianService technicianService
     ) {
+        this(appointmentService, technicianService, null);
+    }
+
+    public TechnicianAppointmentsPanel(
+            AppointmentService appointmentService,
+            TechnicianService technicianService,
+            Runnable onBack
+    ) {
+        this.onBack = onBack;
         this.appointmentService = appointmentService;
         this.technicianService = technicianService;
 
@@ -110,8 +120,20 @@ public class TechnicianAppointmentsPanel extends JPanel {
         JButton button = UiStyle.secondaryButton("< Înapoi");
         button.setPreferredSize(new Dimension(110, 38));
 
-        // navigarea înapoi va fi gestionată de dashboard
-        // printr-un callback; pentru moment butonul rămâne vizual
+        button.addActionListener(e -> {
+            if (onBack != null) {
+                onBack.run();
+                return;
+            }
+            Container parent = getParent();
+            while (parent != null) {
+                if (parent.getLayout() instanceof CardLayout layout) {
+                    layout.show(parent, "HOME");
+                    return;
+                }
+                parent = parent.getParent();
+            }
+        });
         return button;
     }
 
