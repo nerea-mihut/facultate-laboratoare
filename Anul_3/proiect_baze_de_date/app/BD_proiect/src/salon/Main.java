@@ -28,4 +28,4 @@ public class Main {
             new LoginFrame();
         });
     }
-}
+}//integrare ai
