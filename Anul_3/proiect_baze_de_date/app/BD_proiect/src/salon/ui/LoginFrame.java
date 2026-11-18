@@ -1,6 +1,7 @@
 package salon.ui;
 
 import salon.db.DatabaseConnection;
+import salon.ui.trainer.TrainerDashboard;
 
 import javax.swing.*;
 import java.awt.*;
@@ -385,13 +386,11 @@ public class LoginFrame extends JFrame {
         }
 
         if ("Trainer".equals(role)) {
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Interfața trainerului va fi implementată "
-                            + "în pasul următor.",
-                    "Autentificare reușită",
-                    JOptionPane.INFORMATION_MESSAGE
-            );
+            TrainerDashboard trainerDashboard =
+                    new TrainerDashboard(email);
+
+            trainerDashboard.setVisible(true);
+            dispose();
 
             return;
         }
