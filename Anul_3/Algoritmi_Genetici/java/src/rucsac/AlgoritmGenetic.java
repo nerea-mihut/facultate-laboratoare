@@ -51,4 +51,6 @@ public class AlgoritmGenetic {
             System.out.println("Fitness: " + ind.getFitness());
         }
     }
+
+    
 }
