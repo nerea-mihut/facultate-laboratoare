@@ -12,24 +12,45 @@ import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
+import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class AppointmentBookingPanel extends JPanel {
 
-    private static final Color CREAM = new Color(244, 240, 233);
-    private static final Color INK = new Color(30, 30, 30);
-    private static final Color MUTED = new Color(115, 110, 103);
+    private static final Color CREAM =
+            new Color(244, 240, 233);
+
+    private static final Color INK =
+            new Color(30, 30, 30);
+
+    private static final Color MUTED =
+            new Color(115, 110, 103);
+
     private static final Color WHITE = Color.WHITE;
-    private static final Color FIELD = new Color(250, 249, 247);
-    private static final Color BORDER = new Color(225, 220, 213);
-    private static final Color BEIGE = new Color(231, 221, 205);
-    private static final Color HOVER = new Color(220, 208, 188);
-    private static final Color GREEN = new Color(88, 150, 105);
-    private static final Color RED = new Color(160, 45, 45);
+
+    private static final Color FIELD =
+            new Color(250, 249, 247);
+
+    private static final Color BORDER =
+            new Color(225, 220, 213);
+
+    private static final Color BEIGE =
+            new Color(231, 221, 205);
+
+    private static final Color HOVER =
+            new Color(220, 208, 188);
+
+    private static final Color GREEN =
+            new Color(88, 150, 105);
+
+    private static final Color RED =
+            new Color(160, 45, 45);
 
     private static final Locale RO =
             Locale.forLanguageTag("ro-RO");
@@ -42,8 +63,11 @@ public class AppointmentBookingPanel extends JPanel {
 
     private final String userEmail;
 
-    private final JPanel technicianListPanel = new JPanel();
-    private final JPanel rightPanel = new JPanel(new CardLayout());
+    private final JPanel technicianListPanel =
+            new JPanel();
+
+    private final JPanel rightPanel =
+            new JPanel(new CardLayout());
 
     private final JPanel typePanel =
             new JPanel(new GridLayout(2, 2, 10, 10));
@@ -68,17 +92,29 @@ public class AppointmentBookingPanel extends JPanel {
     private final JLabel technicianTitle =
             new JLabel("Alege o tehniciană");
 
-    private final JLabel variantTitle = new JLabel("Opțiuni");
-    private final JLabel serviceDescription = new JLabel(" ");
-    private final JLabel selectionLabel = new JLabel(" ");
-    private final JLabel totalLabel = new JLabel("Total: —");
-    private final JLabel statusLabel = new JLabel(" ");
+    private final JLabel variantTitle =
+            new JLabel("Opțiuni");
+
+    private final JLabel serviceDescription =
+            new JLabel(" ");
+
+    private final JLabel selectionLabel =
+            new JLabel(" ");
+
+    private final JLabel totalLabel =
+            new JLabel("Total: —");
+
+    private final JLabel statusLabel =
+            new JLabel(" ");
 
     private final JLabel monthLabel =
             new JLabel("", SwingConstants.CENTER);
 
-    private final JLabel calendarSummaryLabel = new JLabel(" ");
-    private final JLabel hoursTitle = new JLabel(" ");
+    private final JLabel calendarSummaryLabel =
+            new JLabel(" ");
+
+    private final JLabel hoursTitle =
+            new JLabel(" ");
 
     private final JButton availabilityButton =
             new JButton("Vezi disponibilitatea");
@@ -90,6 +126,7 @@ public class AppointmentBookingPanel extends JPanel {
             new ArrayList<>();
 
     private TechnicianItem selectedTechnician;
+
     private ServiceItem baseService;
     private ServiceItem designService;
     private ServiceItem extraService;
@@ -97,6 +134,7 @@ public class AppointmentBookingPanel extends JPanel {
     private String selectedType;
 
     private YearMonth displayedMonth = YearMonth.now();
+
     private LocalDate selectedDate;
 
     private boolean bookingBusy;
@@ -106,30 +144,49 @@ public class AppointmentBookingPanel extends JPanel {
 
         setLayout(new BorderLayout());
         setBackground(CREAM);
+
         setBorder(
-                BorderFactory.createEmptyBorder(20, 20, 20, 20)
+                BorderFactory.createEmptyBorder(
+                        20, 20, 20, 20
+                )
         );
 
         JPanel card = new RoundedPanel(WHITE, 28);
+
         card.setLayout(new BorderLayout(24, 0));
+
         card.setBorder(
-                BorderFactory.createEmptyBorder(24, 24, 24, 24)
+                BorderFactory.createEmptyBorder(
+                        24, 24, 24, 24
+                )
         );
 
         card.add(createLeftPanel(), BorderLayout.WEST);
 
         rightPanel.setOpaque(false);
-        rightPanel.add(createServiceView(), "SERVICES");
-        rightPanel.add(createCalendarView(), "CALENDAR");
+
+        rightPanel.add(
+                createServiceView(),
+                "SERVICES"
+        );
+
+        rightPanel.add(
+                createCalendarView(),
+                "CALENDAR"
+        );
 
         card.add(rightPanel, BorderLayout.CENTER);
 
         statusLabel.setFont(
                 new Font("SansSerif", Font.PLAIN, 12)
         );
+
         statusLabel.setForeground(MUTED);
+
         statusLabel.setBorder(
-                BorderFactory.createEmptyBorder(12, 4, 0, 4)
+                BorderFactory.createEmptyBorder(
+                        12, 4, 0, 4
+                )
         );
 
         add(card, BorderLayout.CENTER);
@@ -141,7 +198,9 @@ public class AppointmentBookingPanel extends JPanel {
     }
 
     private JPanel createLeftPanel() {
-        JPanel panel = new JPanel(new BorderLayout(0, 16));
+        JPanel panel =
+                new JPanel(new BorderLayout(0, 16));
+
         panel.setOpaque(false);
         panel.setPreferredSize(new Dimension(226, 0));
 
@@ -156,6 +215,7 @@ public class AppointmentBookingPanel extends JPanel {
                         BoxLayout.Y_AXIS
                 )
         );
+
         technicianListPanel.setOpaque(false);
 
         panel.add(
@@ -164,29 +224,42 @@ public class AppointmentBookingPanel extends JPanel {
         );
 
         stylePrimary(availabilityButton);
+
         availabilityButton.setPreferredSize(
                 new Dimension(226, 44)
         );
-        availabilityButton.addActionListener(e -> showCalendar());
 
-        panel.add(availabilityButton, BorderLayout.SOUTH);
+        availabilityButton.addActionListener(
+                event -> showCalendar()
+        );
+
+        panel.add(
+                availabilityButton,
+                BorderLayout.SOUTH
+        );
 
         return panel;
     }
 
     private JPanel createServiceView() {
-        JPanel view = new JPanel(new BorderLayout(0, 16));
+        JPanel view =
+                new JPanel(new BorderLayout(0, 16));
+
         view.setOpaque(false);
 
-        JPanel heading = new JPanel(new GridLayout(0, 1, 0, 5));
+        JPanel heading =
+                new JPanel(new GridLayout(0, 1, 0, 5));
+
         heading.setOpaque(false);
 
         technicianTitle.setFont(
                 new Font("SansSerif", Font.BOLD, 25)
         );
+
         technicianTitle.setForeground(INK);
 
         heading.add(technicianTitle);
+
         heading.add(
                 label(
                         "Alege serviciul și personalizează programarea.",
@@ -199,8 +272,12 @@ public class AppointmentBookingPanel extends JPanel {
         view.add(heading, BorderLayout.NORTH);
 
         JPanel form = new JPanel();
+
         form.setOpaque(false);
-        form.setLayout(new BoxLayout(form, BoxLayout.Y_AXIS));
+
+        form.setLayout(
+                new BoxLayout(form, BoxLayout.Y_AXIS)
+        );
 
         form.add(section("Serviciu", typePanel));
         form.add(Box.createVerticalStrut(17));
@@ -210,9 +287,13 @@ public class AppointmentBookingPanel extends JPanel {
         variantTitle.setFont(
                 new Font("SansSerif", Font.BOLD, 13)
         );
+
         variantTitle.setForeground(INK);
 
-        variants.add(variantTitle, BorderLayout.NORTH);
+        variants.add(
+                variantTitle,
+                BorderLayout.NORTH
+        );
 
         form.add(variants);
         form.add(Box.createVerticalStrut(10));
@@ -220,20 +301,27 @@ public class AppointmentBookingPanel extends JPanel {
         serviceDescription.setFont(
                 new Font("SansSerif", Font.PLAIN, 12)
         );
+
         serviceDescription.setForeground(MUTED);
 
-        JPanel descriptionPanel = new JPanel(new BorderLayout()) {
-            @Override
-            public Dimension getMaximumSize() {
-                return new Dimension(
-                        Integer.MAX_VALUE,
-                        getPreferredSize().height
-                );
-            }
-        };
+        JPanel descriptionPanel =
+                new JPanel(new BorderLayout()) {
+
+                    @Override
+                    public Dimension getMaximumSize() {
+                        return new Dimension(
+                                Integer.MAX_VALUE,
+                                getPreferredSize().height
+                        );
+                    }
+                };
 
         descriptionPanel.setOpaque(false);
-        descriptionPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        descriptionPanel.setAlignmentX(
+                Component.LEFT_ALIGNMENT
+        );
+
         descriptionPanel.add(
                 serviceDescription,
                 BorderLayout.CENTER
@@ -252,52 +340,94 @@ public class AppointmentBookingPanel extends JPanel {
 
         form.add(extraSection);
 
-        view.add(scroll(form), BorderLayout.CENTER);
+        view.add(
+                scroll(form),
+                BorderLayout.CENTER
+        );
 
         JPanel summary = new RoundedPanel(FIELD, 18);
+
         summary.setLayout(new BorderLayout(12, 0));
+
         summary.setBorder(
-                BorderFactory.createEmptyBorder(15, 18, 15, 18)
+                BorderFactory.createEmptyBorder(
+                        15, 18, 15, 18
+                )
         );
 
         selectionLabel.setFont(
                 new Font("SansSerif", Font.PLAIN, 12)
         );
+
         selectionLabel.setForeground(MUTED);
 
         totalLabel.setFont(
                 new Font("SansSerif", Font.BOLD, 19)
         );
+
         totalLabel.setForeground(INK);
 
-        summary.add(selectionLabel, BorderLayout.CENTER);
-        summary.add(totalLabel, BorderLayout.EAST);
+        summary.add(
+                selectionLabel,
+                BorderLayout.CENTER
+        );
 
-        view.add(summary, BorderLayout.SOUTH);
+        summary.add(
+                totalLabel,
+                BorderLayout.EAST
+        );
+
+        view.add(
+                summary,
+                BorderLayout.SOUTH
+        );
 
         return view;
     }
 
     private JPanel createCalendarView() {
-        JPanel view = new JPanel(new BorderLayout(0, 16));
+        JPanel view =
+                new JPanel(new BorderLayout(0, 16));
+
         view.setOpaque(false);
 
-        JPanel heading = new JPanel(new BorderLayout(12, 0));
+        JPanel heading =
+                new JPanel(new BorderLayout(12, 0));
+
         heading.setOpaque(false);
 
-        JPanel titles = new JPanel(new GridLayout(0, 1, 0, 5));
+        JPanel titles =
+                new JPanel(new GridLayout(0, 1, 0, 5));
+
         titles.setOpaque(false);
-        titles.add(label("Alege ziua", 25, true, INK));
+
+        titles.add(
+                label(
+                        "Alege ziua",
+                        25,
+                        true,
+                        INK
+                )
+        );
 
         calendarSummaryLabel.setFont(
                 new Font("SansSerif", Font.PLAIN, 12)
         );
+
         calendarSummaryLabel.setForeground(MUTED);
+
         titles.add(calendarSummaryLabel);
 
-        JButton back = new JButton("Modifică serviciul");
+        JButton back =
+                new JButton("Modifică serviciul");
+
         styleSecondary(back);
-        back.addActionListener(e -> showServices());
+
+        back.addActionListener(event -> {
+            if (!bookingBusy) {
+                showServices();
+            }
+        });
 
         heading.add(titles, BorderLayout.CENTER);
         heading.add(back, BorderLayout.EAST);
@@ -305,10 +435,16 @@ public class AppointmentBookingPanel extends JPanel {
         view.add(heading, BorderLayout.NORTH);
 
         JPanel body = new JPanel();
-        body.setOpaque(false);
-        body.setLayout(new BoxLayout(body, BoxLayout.Y_AXIS));
 
-        JPanel navigation = new JPanel(new BorderLayout(12, 0));
+        body.setOpaque(false);
+
+        body.setLayout(
+                new BoxLayout(body, BoxLayout.Y_AXIS)
+        );
+
+        JPanel navigation =
+                new JPanel(new BorderLayout(12, 0));
+
         navigation.setOpaque(false);
 
         JButton previous = new JButton("<");
@@ -317,42 +453,77 @@ public class AppointmentBookingPanel extends JPanel {
         styleSecondary(previous);
         styleSecondary(next);
 
-        previous.setPreferredSize(new Dimension(42, 36));
-        next.setPreferredSize(new Dimension(42, 36));
+        previous.setPreferredSize(
+                new Dimension(42, 36)
+        );
 
-        previous.addActionListener(e -> {
-            displayedMonth = displayedMonth.minusMonths(1);
-            refreshCalendar();
+        next.setPreferredSize(
+                new Dimension(42, 36)
+        );
+
+        previous.addActionListener(event -> {
+            if (!bookingBusy) {
+                displayedMonth =
+                        displayedMonth.minusMonths(1);
+
+                refreshCalendar();
+            }
         });
 
-        next.addActionListener(e -> {
-            displayedMonth = displayedMonth.plusMonths(1);
-            refreshCalendar();
+        next.addActionListener(event -> {
+            if (!bookingBusy) {
+                displayedMonth =
+                        displayedMonth.plusMonths(1);
+
+                refreshCalendar();
+            }
         });
 
         monthLabel.setFont(
                 new Font("SansSerif", Font.BOLD, 18)
         );
+
         monthLabel.setForeground(INK);
 
-        navigation.add(previous, BorderLayout.WEST);
-        navigation.add(monthLabel, BorderLayout.CENTER);
-        navigation.add(next, BorderLayout.EAST);
+        navigation.add(
+                previous,
+                BorderLayout.WEST
+        );
+
+        navigation.add(
+                monthLabel,
+                BorderLayout.CENTER
+        );
+
+        navigation.add(
+                next,
+                BorderLayout.EAST
+        );
 
         navigation.setMaximumSize(
                 new Dimension(Integer.MAX_VALUE, 38)
         );
-        navigation.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        navigation.setAlignmentX(
+                Component.LEFT_ALIGNMENT
+        );
 
         body.add(navigation);
         body.add(Box.createVerticalStrut(12));
 
         calendarGrid.setOpaque(false);
-        calendarGrid.setPreferredSize(new Dimension(500, 300));
+
+        calendarGrid.setPreferredSize(
+                new Dimension(500, 300)
+        );
+
         calendarGrid.setMaximumSize(
                 new Dimension(Integer.MAX_VALUE, 320)
         );
-        calendarGrid.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        calendarGrid.setAlignmentX(
+                Component.LEFT_ALIGNMENT
+        );
 
         body.add(calendarGrid);
         body.add(Box.createVerticalStrut(18));
@@ -360,39 +531,63 @@ public class AppointmentBookingPanel extends JPanel {
         hoursTitle.setFont(
                 new Font("SansSerif", Font.BOLD, 16)
         );
+
         hoursTitle.setForeground(INK);
-        hoursTitle.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        hoursTitle.setAlignmentX(
+                Component.LEFT_ALIGNMENT
+        );
 
         body.add(hoursTitle);
         body.add(Box.createVerticalStrut(10));
 
         hoursPanel.setOpaque(false);
 
-        JPanel hoursWrapper = new JPanel(new BorderLayout());
+        JPanel hoursWrapper =
+                new JPanel(new BorderLayout());
+
         hoursWrapper.setOpaque(false);
-        hoursWrapper.setAlignmentX(Component.LEFT_ALIGNMENT);
-        hoursWrapper.add(hoursPanel, BorderLayout.NORTH);
+
+        hoursWrapper.setAlignmentX(
+                Component.LEFT_ALIGNMENT
+        );
+
+        hoursWrapper.add(
+                hoursPanel,
+                BorderLayout.NORTH
+        );
 
         body.add(hoursWrapper);
 
-        view.add(scroll(body), BorderLayout.CENTER);
+        view.add(
+                scroll(body),
+                BorderLayout.CENTER
+        );
 
         return view;
     }
 
-    private JPanel section(String title, JPanel contents) {
-        JPanel panel = new JPanel(new BorderLayout(0, 9)) {
-            @Override
-            public Dimension getMaximumSize() {
-                return new Dimension(
-                        Integer.MAX_VALUE,
-                        getPreferredSize().height
-                );
-            }
-        };
+    private JPanel section(
+            String title,
+            JPanel contents
+    ) {
+        JPanel panel =
+                new JPanel(new BorderLayout(0, 9)) {
+
+                    @Override
+                    public Dimension getMaximumSize() {
+                        return new Dimension(
+                                Integer.MAX_VALUE,
+                                getPreferredSize().height
+                        );
+                    }
+                };
 
         panel.setOpaque(false);
-        panel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        panel.setAlignmentX(
+                Component.LEFT_ALIGNMENT
+        );
 
         contents.setOpaque(false);
 
@@ -400,13 +595,18 @@ public class AppointmentBookingPanel extends JPanel {
                 label(title, 13, true, INK),
                 BorderLayout.NORTH
         );
-        panel.add(contents, BorderLayout.CENTER);
+
+        panel.add(
+                contents,
+                BorderLayout.CENTER
+        );
 
         return panel;
     }
 
     private JScrollPane scroll(JPanel panel) {
-        JScrollPane result = new JScrollPane(panel);
+        JScrollPane result =
+                new JScrollPane(panel);
 
         result.setBorder(null);
         result.setOpaque(false);
@@ -416,7 +616,8 @@ public class AppointmentBookingPanel extends JPanel {
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER
         );
 
-        result.getVerticalScrollBar().setUnitIncrement(18);
+        result.getVerticalScrollBar()
+                .setUnitIncrement(18);
 
         return result;
     }
@@ -436,6 +637,7 @@ public class AppointmentBookingPanel extends JPanel {
                         size
                 )
         );
+
         result.setForeground(color);
 
         return result;
@@ -462,51 +664,76 @@ public class AppointmentBookingPanel extends JPanel {
                 PreparedStatement statement =
                         connection.prepareStatement(sql);
 
-                ResultSet result = statement.executeQuery()
+                ResultSet result =
+                        statement.executeQuery()
         ) {
             while (result.next()) {
-                TechnicianItem technician = new TechnicianItem(
-                        result.getInt("id_angajat"),
-                        result.getString("nume_complet")
-                );
+                TechnicianItem technician =
+                        new TechnicianItem(
+                                result.getInt("id_angajat"),
+                                result.getString("nume_complet")
+                        );
 
                 ChoiceButton button =
-                        new ChoiceButton(technician.name());
+                        new ChoiceButton(
+                                technician.name()
+                        );
 
                 button.setHorizontalAlignment(
                         SwingConstants.LEFT
                 );
-                button.setPreferredSize(new Dimension(220, 40));
-                button.setMinimumSize(new Dimension(160, 40));
+
+                button.setPreferredSize(
+                        new Dimension(220, 40)
+                );
+
+                button.setMinimumSize(
+                        new Dimension(160, 40)
+                );
+
                 button.setMaximumSize(
                         new Dimension(Integer.MAX_VALUE, 40)
                 );
-                button.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-                button.addActionListener(e ->
-                        selectTechnician(technician)
+                button.setAlignmentX(
+                        Component.LEFT_ALIGNMENT
                 );
 
+                button.addActionListener(event -> {
+                    if (!bookingBusy) {
+                        selectTechnician(technician);
+                    }
+                });
+
                 technicianChoices.add(
-                        new TechnicianChoice(technician, button)
+                        new TechnicianChoice(
+                                technician,
+                                button
+                        )
                 );
 
                 technicianListPanel.add(button);
+
                 technicianListPanel.add(
                         Box.createVerticalStrut(8)
                 );
             }
 
         } catch (SQLException exception) {
-            showError("Tehnicienii nu au putut fi încărcați.");
             exception.printStackTrace();
+
+            showError(
+                    "Tehnicienii nu au putut fi încărcați."
+            );
         }
 
         technicianListPanel.revalidate();
         technicianListPanel.repaint();
     }
 
-    private void selectTechnician(TechnicianItem technician) {
+    private void selectTechnician(
+            TechnicianItem technician
+    ) {
         selectedTechnician = technician;
 
         selectedType = null;
@@ -517,12 +744,17 @@ public class AppointmentBookingPanel extends JPanel {
 
         offeredServices.clear();
 
-        technicianTitle.setText(technician.name());
+        technicianTitle.setText(
+                technician.name()
+        );
+
+        statusLabel.setForeground(MUTED);
         statusLabel.setText(" ");
 
         for (TechnicianChoice choice : technicianChoices) {
             choice.button().setSelected(
-                    choice.technician().id() == technician.id()
+                    choice.technician().id()
+                            == technician.id()
             );
         }
 
@@ -548,9 +780,15 @@ public class AppointmentBookingPanel extends JPanel {
                 PreparedStatement statement =
                         connection.prepareStatement(sql)
         ) {
-            statement.setInt(1, technician.id());
+            statement.setInt(
+                    1,
+                    technician.id()
+            );
 
-            try (ResultSet result = statement.executeQuery()) {
+            try (
+                    ResultSet result =
+                            statement.executeQuery()
+            ) {
                 while (result.next()) {
                     offeredServices.add(
                             new ServiceItem(
@@ -566,8 +804,11 @@ public class AppointmentBookingPanel extends JPanel {
             }
 
         } catch (SQLException exception) {
-            showError("Serviciile nu au putut fi încărcate.");
             exception.printStackTrace();
+
+            showError(
+                    "Serviciile nu au putut fi încărcate."
+            );
         }
 
         rebuildChoices();
@@ -602,9 +843,12 @@ public class AppointmentBookingPanel extends JPanel {
         } else {
             switch (selectedType) {
                 case "SEMI" -> buildSemiChoices();
+
                 case "SLIM" -> buildSlimChoices();
+
                 case "MAINTENANCE" ->
                         buildLengthChoices("intretinere");
+
                 case "CONSTRUCTION" ->
                         buildLengthChoices("constructie");
             }
@@ -618,13 +862,22 @@ public class AppointmentBookingPanel extends JPanel {
         rightPanel.repaint();
     }
 
-    private void addTypeChoice(String title, String type) {
-        ChoiceButton button = new ChoiceButton(title);
+    private void addTypeChoice(
+            String title,
+            String type
+    ) {
+        ChoiceButton button =
+                new ChoiceButton(title);
 
-        button.setSelected(type.equals(selectedType));
-        button.setEnabled(hasType(type));
+        button.setSelected(
+                type.equals(selectedType)
+        );
 
-        button.addActionListener(e -> {
+        button.setEnabled(
+                hasType(type)
+        );
+
+        button.addActionListener(event -> {
             if (!type.equals(selectedType)) {
                 baseService = null;
                 extraService = null;
@@ -638,42 +891,58 @@ public class AppointmentBookingPanel extends JPanel {
     }
 
     private boolean hasType(String type) {
-        return offeredServices.stream().anyMatch(service -> {
-            String name = normalize(service.name());
-            String category = normalize(service.category());
+        return offeredServices.stream()
+                .anyMatch(service -> {
+                    String name =
+                            normalize(service.name());
 
-            return switch (type) {
-                case "SEMI" ->
-                        name.contains("oja")
-                                && name.contains("semi");
+                    String category =
+                            normalize(service.category());
 
-                case "SLIM" -> name.equals("slim");
+                    return switch (type) {
+                        case "SEMI" ->
+                                name.contains("oja")
+                                        && name.contains("semi");
 
-                case "MAINTENANCE" ->
-                        category.equals("intretinere")
-                                && sizeOf(service) >= 2;
+                        case "SLIM" ->
+                                name.equals("slim");
 
-                case "CONSTRUCTION" ->
-                        category.equals("constructie")
-                                && sizeOf(service) >= 2;
+                        case "MAINTENANCE" ->
+                                category.equals("intretinere")
+                                        && sizeOf(service) >= 2;
 
-                default -> false;
-            };
-        });
+                        case "CONSTRUCTION" ->
+                                category.equals("constructie")
+                                        && sizeOf(service) >= 2;
+
+                        default -> false;
+                    };
+                });
     }
 
-    private void buildLengthChoices(String category) {
+    private void buildLengthChoices(
+            String category
+    ) {
         variantTitle.setText("Mărimea");
 
-        List<ServiceItem> sizes = offeredServices.stream()
-                .filter(service ->
-                        category.equals(
-                                normalize(service.category())
+        List<ServiceItem> sizes =
+                offeredServices.stream()
+                        .filter(service ->
+                                category.equals(
+                                        normalize(
+                                                service.category()
+                                        )
+                                )
                         )
-                )
-                .filter(service -> sizeOf(service) >= 2)
-                .sorted(Comparator.comparingInt(this::sizeOf))
-                .toList();
+                        .filter(service ->
+                                sizeOf(service) >= 2
+                        )
+                        .sorted(
+                                Comparator.comparingInt(
+                                        this::sizeOf
+                                )
+                        )
+                        .toList();
 
         for (ServiceItem stored : sizes) {
             int size = sizeOf(stored);
@@ -682,26 +951,30 @@ public class AppointmentBookingPanel extends JPanel {
             boolean construction =
                     "constructie".equals(category);
 
-            int duration = construction
-                    ? 90 + steps * 25
-                    : 60 + steps * 15;
+            int duration =
+                    construction
+                            ? 90 + steps * 25
+                            : 60 + steps * 15;
 
-            long price = construction
-                    ? 150L + steps * 15L
-                    : 130L + steps * 10L;
+            long price =
+                    construction
+                            ? 150L + steps * 15L
+                            : 130L + steps * 10L;
 
-            String displayName = construction
-                    ? "Construcție"
-                    : "Întreținere";
+            String displayName =
+                    construction
+                            ? "Construcție"
+                            : "Întreținere";
 
-            ServiceItem choice = new ServiceItem(
-                    stored.id(),
-                    displayName,
-                    stored.category(),
-                    duration,
-                    BigDecimal.valueOf(price),
-                    "Mărimea " + size
-            );
+            ServiceItem choice =
+                    new ServiceItem(
+                            stored.id(),
+                            displayName,
+                            stored.category(),
+                            duration,
+                            BigDecimal.valueOf(price),
+                            "Mărimea " + size
+                    );
 
             addVariantChoice(
                     choice,
@@ -714,32 +987,38 @@ public class AppointmentBookingPanel extends JPanel {
         variantTitle.setText("Mărimea");
 
         serviceDescription.setText(
-                "<html>Potrivit pentru persoanele cu unghii "
-                        + "care cresc în jos.</html>"
+                "<html>"
+                        + "Potrivit pentru persoanele cu unghii "
+                        + "care cresc în jos."
+                        + "</html>"
         );
 
-        ServiceItem stored = offeredServices.stream()
-                .filter(service ->
-                        normalize(service.name()).equals("slim")
-                )
-                .findFirst()
-                .orElse(null);
+        ServiceItem stored =
+                offeredServices.stream()
+                        .filter(service ->
+                                normalize(service.name())
+                                        .equals("slim")
+                        )
+                        .findFirst()
+                        .orElse(null);
 
         if (stored == null) {
             return;
         }
 
         for (int size = 2; size <= 4; size++) {
-            long price = 150L + (size - 2) * 25L;
+            long price =
+                    150L + (size - 2) * 25L;
 
-            ServiceItem choice = new ServiceItem(
-                    stored.id(),
-                    "Slim",
-                    stored.category(),
-                    90,
-                    BigDecimal.valueOf(price),
-                    "Mărimea " + size
-            );
+            ServiceItem choice =
+                    new ServiceItem(
+                            stored.id(),
+                            "Slim",
+                            stored.category(),
+                            90,
+                            BigDecimal.valueOf(price),
+                            "Mărimea " + size
+                    );
 
             addVariantChoice(
                     choice,
@@ -751,56 +1030,67 @@ public class AppointmentBookingPanel extends JPanel {
     private void buildSemiChoices() {
         variantTitle.setText("Tehnica");
 
-        ServiceItem stored = offeredServices.stream()
-                .filter(service -> {
-                    String name = normalize(service.name());
+        ServiceItem stored =
+                offeredServices.stream()
+                        .filter(service -> {
+                            String name =
+                                    normalize(
+                                            service.name()
+                                    );
 
-                    return name.contains("oja")
-                            && name.contains("semi");
-                })
-                .findFirst()
-                .orElse(null);
+                            return name.contains("oja")
+                                    && name.contains("semi");
+                        })
+                        .findFirst()
+                        .orElse(null);
 
         if (stored == null) {
             return;
         }
 
-        ServiceItem simple = new ServiceItem(
-                stored.id(),
-                "Ojă semi",
-                stored.category(),
-                60,
-                BigDecimal.valueOf(130),
-                "Tehnică simplă"
-        );
+        ServiceItem simple =
+                new ServiceItem(
+                        stored.id(),
+                        "Ojă semi",
+                        stored.category(),
+                        60,
+                        BigDecimal.valueOf(130),
+                        "Tehnică simplă"
+                );
 
-        ServiceItem hybrid = new ServiceItem(
-                stored.id(),
-                "Ojă semi",
-                stored.category(),
-                60,
-                BigDecimal.valueOf(140),
-                "Tehnică Hybrid"
-        );
+        ServiceItem hybrid =
+                new ServiceItem(
+                        stored.id(),
+                        "Ojă semi",
+                        stored.category(),
+                        60,
+                        BigDecimal.valueOf(140),
+                        "Tehnică Hybrid"
+                );
 
         addVariantChoice(simple, "Simplă");
         addVariantChoice(hybrid, "Hybrid");
 
-        if (baseService != null
-                && "Tehnică Hybrid".equals(
-                baseService.details()
-        )) {
-
+        if (
+                baseService != null
+                        && "Tehnică Hybrid".equals(
+                        baseService.details()
+                )
+        ) {
             serviceDescription.setText(
-                    "<html>Întărirea vârfului cu polygel pentru "
+                    "<html>"
+                            + "Întărirea vârfului cu polygel pentru "
                             + "unghii mai moi sau corecții "
-                            + "de arhitectură.</html>"
+                            + "de arhitectură."
+                            + "</html>"
             );
 
         } else {
             serviceDescription.setText(
-                    "<html>Fără selector de lungime. "
-                            + "Alege tehnica simplă sau Hybrid.</html>"
+                    "<html>"
+                            + "Fără selector de lungime. "
+                            + "Alege tehnica simplă sau Hybrid."
+                            + "</html>"
             );
         }
     }
@@ -809,13 +1099,14 @@ public class AppointmentBookingPanel extends JPanel {
             ServiceItem choice,
             String title
     ) {
-        ChoiceButton button = pricedChoice(
-                title,
-                money(choice.price()),
-                sameChoice(baseService, choice)
-        );
+        ChoiceButton button =
+                pricedChoice(
+                        title,
+                        money(choice.price()),
+                        sameChoice(baseService, choice)
+                );
 
-        button.addActionListener(e -> {
+        button.addActionListener(event -> {
             baseService = choice;
             rebuildChoices();
         });
@@ -824,15 +1115,18 @@ public class AppointmentBookingPanel extends JPanel {
     }
 
     private void buildDesignChoices() {
-        ChoiceButton noDesign = pricedChoice(
-                "Fără design",
-                "0 lei",
-                designService == null
+        ChoiceButton noDesign =
+                pricedChoice(
+                        "Fără design",
+                        "0 lei",
+                        designService == null
+                );
+
+        noDesign.setEnabled(
+                selectedTechnician != null
         );
 
-        noDesign.setEnabled(selectedTechnician != null);
-
-        noDesign.addActionListener(e -> {
+        noDesign.addActionListener(event -> {
             designService = null;
             rebuildChoices();
         });
@@ -842,7 +1136,9 @@ public class AppointmentBookingPanel extends JPanel {
         offeredServices.stream()
                 .filter(service ->
                         "design".equals(
-                                normalize(service.category())
+                                normalize(
+                                        service.category()
+                                )
                         )
                 )
                 .sorted(
@@ -851,13 +1147,17 @@ public class AppointmentBookingPanel extends JPanel {
                         )
                 )
                 .forEach(service -> {
-                    ChoiceButton button = pricedChoice(
-                            designName(service),
-                            "+" + money(service.price()),
-                            sameChoice(designService, service)
-                    );
+                    ChoiceButton button =
+                            pricedChoice(
+                                    designName(service),
+                                    "+" + money(service.price()),
+                                    sameChoice(
+                                            designService,
+                                            service
+                                    )
+                            );
 
-                    button.addActionListener(e -> {
+                    button.addActionListener(event -> {
                         designService = service;
                         rebuildChoices();
                     });
@@ -868,7 +1168,9 @@ public class AppointmentBookingPanel extends JPanel {
 
     private void buildExtraChoices() {
         boolean maintenance =
-                "MAINTENANCE".equals(selectedType);
+                "MAINTENANCE".equals(
+                        selectedType
+                );
 
         if (!maintenance) {
             extraService = null;
@@ -880,13 +1182,14 @@ public class AppointmentBookingPanel extends JPanel {
             return;
         }
 
-        ChoiceButton noExtra = pricedChoice(
-                "Fără extraopțiuni",
-                "0 lei",
-                extraService == null
-        );
+        ChoiceButton noExtra =
+                pricedChoice(
+                        "Fără extraopțiuni",
+                        "0 lei",
+                        extraService == null
+                );
 
-        noExtra.addActionListener(e -> {
+        noExtra.addActionListener(event -> {
             extraService = null;
             rebuildChoices();
         });
@@ -894,23 +1197,31 @@ public class AppointmentBookingPanel extends JPanel {
         extraPanel.add(noExtra);
 
         for (ServiceItem service : offeredServices) {
-            if (!"supliment".equals(
-                    normalize(service.category())
-            )) {
+            if (
+                    !"supliment".equals(
+                            normalize(
+                                    service.category()
+                            )
+                    )
+            ) {
                 continue;
             }
 
-            ChoiceButton button = pricedChoice(
-                    extraName(service),
-                    "+" + money(service.price()),
-                    sameChoice(extraService, service)
-            );
+            ChoiceButton button =
+                    pricedChoice(
+                            extraName(service),
+                            "+" + money(service.price()),
+                            sameChoice(
+                                    extraService,
+                                    service
+                            )
+                    );
 
-            button.addActionListener(e -> {
-                extraService = sameChoice(
-                        extraService,
-                        service
-                ) ? null : service;
+            button.addActionListener(event -> {
+                extraService =
+                        sameChoice(extraService, service)
+                                ? null
+                                : service;
 
                 rebuildChoices();
             });
@@ -924,32 +1235,49 @@ public class AppointmentBookingPanel extends JPanel {
             String price,
             boolean selected
     ) {
-        ChoiceButton button = new ChoiceButton(
-                "<html><div style='text-align:center;'>"
-                        + escape(title)
-                        + "<br><span style='font-size:10px;'>"
-                        + escape(price)
-                        + "</span></div></html>"
+        ChoiceButton button =
+                new ChoiceButton(
+                        "<html>"
+                                + "<div style='text-align:center;'>"
+                                + escape(title)
+                                + "<br>"
+                                + "<span style='font-size:10px;'>"
+                                + escape(price)
+                                + "</span>"
+                                + "</div>"
+                                + "</html>"
+                );
+
+        button.setPreferredSize(
+                new Dimension(120, 54)
         );
 
-        button.setPreferredSize(new Dimension(120, 54));
         button.setSelected(selected);
 
         return button;
     }
 
     private int sizeOf(ServiceItem service) {
-        Matcher matcher = Pattern
-                .compile("marimea\\s*(\\d+)")
-                .matcher(normalize(service.name()));
+        Matcher matcher =
+                Pattern.compile("marimea\\s*(\\d+)")
+                        .matcher(
+                                normalize(
+                                        service.name()
+                                )
+                        );
 
         return matcher.find()
-                ? Integer.parseInt(matcher.group(1))
+                ? Integer.parseInt(
+                matcher.group(1)
+        )
                 : -1;
     }
 
-    private String designName(ServiceItem service) {
-        String name = normalize(service.name());
+    private String designName(
+            ServiceItem service
+    ) {
+        String name =
+                normalize(service.name());
 
         if (name.contains("simplu")) {
             return "Easy";
@@ -966,8 +1294,11 @@ public class AppointmentBookingPanel extends JPanel {
         return service.name();
     }
 
-    private String extraName(ServiceItem service) {
-        String name = normalize(service.name());
+    private String extraName(
+            ServiceItem service
+    ) {
+        String name =
+                normalize(service.name());
 
         if (name.contains("corect")) {
             return "Corectare arhitectură";
@@ -985,12 +1316,15 @@ public class AppointmentBookingPanel extends JPanel {
             return "";
         }
 
-        String details = baseService.details();
+        String details =
+                baseService.details();
 
         return baseService.name()
-                + (details == null || details.isBlank()
-                ? ""
-                : " · " + details);
+                + (
+                details == null || details.isBlank()
+                        ? ""
+                        : " · " + details
+        );
     }
 
     private String normalize(String text) {
@@ -1016,7 +1350,7 @@ public class AppointmentBookingPanel extends JPanel {
         return first != null
                 && second != null
                 && first.id() == second.id()
-                && java.util.Objects.equals(
+                && Objects.equals(
                 first.details(),
                 second.details()
         );
@@ -1024,17 +1358,23 @@ public class AppointmentBookingPanel extends JPanel {
 
     private String money(BigDecimal price) {
         return price.stripTrailingZeros()
-                .toPlainString() + " lei";
+                .toPlainString()
+                + " lei";
     }
 
     private String escape(String text) {
+        if (text == null) {
+            return "";
+        }
+
         return text.replace("&", "&amp;")
                 .replace("<", "&lt;")
                 .replace(">", "&gt;");
     }
 
     private List<ServiceItem> selectedServices() {
-        List<ServiceItem> result = new ArrayList<>();
+        List<ServiceItem> result =
+                new ArrayList<>();
 
         if (baseService != null) {
             result.add(baseService);
@@ -1044,8 +1384,10 @@ public class AppointmentBookingPanel extends JPanel {
             result.add(designService);
         }
 
-        if ("MAINTENANCE".equals(selectedType)
-                && extraService != null) {
+        if (
+                "MAINTENANCE".equals(selectedType)
+                        && extraService != null
+        ) {
             result.add(extraService);
         }
 
@@ -1063,7 +1405,9 @@ public class AppointmentBookingPanel extends JPanel {
 
     private int totalDuration() {
         return selectedServices().stream()
-                .mapToInt(ServiceItem::duration)
+                .mapToInt(
+                        ServiceItem::duration
+                )
                 .sum();
     }
 
@@ -1078,33 +1422,50 @@ public class AppointmentBookingPanel extends JPanel {
             selectionLabel.setText(
                     "Alege serviciul și varianta dorită."
             );
+
             totalLabel.setText("Total: —");
             return;
         }
 
-        StringBuilder text = new StringBuilder(
-                "<html>" + escape(baseDisplayName())
-        );
+        StringBuilder text =
+                new StringBuilder(
+                        "<html>"
+                                + escape(
+                                baseDisplayName()
+                        )
+                );
 
         if (designService != null) {
             text.append("<br>Design ")
                     .append(
-                            escape(designName(designService))
+                            escape(
+                                    designName(
+                                            designService
+                                    )
+                            )
                     );
         }
 
-        if ("MAINTENANCE".equals(selectedType)
-                && extraService != null) {
-
+        if (
+                "MAINTENANCE".equals(selectedType)
+                        && extraService != null
+        ) {
             text.append("<br>")
                     .append(
-                            escape(extraName(extraService))
+                            escape(
+                                    extraName(
+                                            extraService
+                                    )
+                            )
                     );
         }
 
         text.append("</html>");
 
-        selectionLabel.setText(text.toString());
+        selectionLabel.setText(
+                text.toString()
+        );
+
         totalLabel.setText(
                 "Total: " + money(totalPrice())
         );
@@ -1114,19 +1475,24 @@ public class AppointmentBookingPanel extends JPanel {
         availabilityButton.setVisible(true);
 
         ((CardLayout) rightPanel.getLayout())
-                .show(rightPanel, "SERVICES");
+                .show(
+                        rightPanel,
+                        "SERVICES"
+                );
 
         updateSummary();
     }
 
     private void showCalendar() {
-        if (selectedTechnician == null
-                || baseService == null) {
-
+        if (
+                selectedTechnician == null
+                        || baseService == null
+        ) {
             showError(
                     "Selectează tehniciana, serviciul "
                             + "și varianta dorită."
             );
+
             return;
         }
 
@@ -1134,20 +1500,31 @@ public class AppointmentBookingPanel extends JPanel {
 
         calendarSummaryLabel.setText(
                 "<html>"
-                        + escape(selectedTechnician.name())
+                        + escape(
+                        selectedTechnician.name()
+                )
                         + "<br>"
-                        + escape(baseDisplayName())
+                        + escape(
+                        baseDisplayName()
+                )
                         + " · "
-                        + escape(money(totalPrice()))
+                        + escape(
+                        money(totalPrice())
+                )
                         + "</html>"
         );
 
         ((CardLayout) rightPanel.getLayout())
-                .show(rightPanel, "CALENDAR");
+                .show(
+                        rightPanel,
+                        "CALENDAR"
+                );
 
         statusLabel.setForeground(MUTED);
+
         statusLabel.setText(
-                "Zilele cu dungă verde au ore disponibile."
+                "Zilele cu dungă verde permit serviciile "
+                        + "selectate și au ore disponibile."
         );
 
         refreshCalendar();
@@ -1160,23 +1537,33 @@ public class AppointmentBookingPanel extends JPanel {
         selectedDate = null;
         hoursTitle.setText(" ");
 
-        String month = displayedMonth.format(
-                DateTimeFormatter.ofPattern(
-                        "MMMM yyyy",
-                        RO
-                )
-        );
+        String month =
+                displayedMonth.format(
+                        DateTimeFormatter.ofPattern(
+                                "MMMM yyyy",
+                                RO
+                        )
+                );
 
         monthLabel.setText(
-                month.substring(0, 1).toUpperCase(RO)
+                month.substring(0, 1)
+                        .toUpperCase(RO)
                         + month.substring(1)
         );
 
-        for (String day : new String[]{
+        for (
+                String day
+                : new String[]{
                 "Lu", "Ma", "Mi", "Jo", "Vi", "Sâ", "Du"
-        }) {
+        }
+        ) {
             JLabel heading =
-                    label(day, 12, true, MUTED);
+                    label(
+                            day,
+                            12,
+                            true,
+                            MUTED
+                    );
 
             heading.setHorizontalAlignment(
                     SwingConstants.CENTER
@@ -1185,26 +1572,33 @@ public class AppointmentBookingPanel extends JPanel {
             calendarGrid.add(heading);
         }
 
-        int offset = displayedMonth.atDay(1)
-                .getDayOfWeek().getValue() - 1;
+        int offset =
+                displayedMonth.atDay(1)
+                        .getDayOfWeek()
+                        .getValue() - 1;
 
-        for (int i = 0; i < offset; i++) {
+        for (int index = 0; index < offset; index++) {
             calendarGrid.add(new JLabel());
         }
+
+        String loadingError = null;
 
         try (
                 Connection connection =
                         DatabaseConnection.getConnection()
         ) {
-            for (int day = 1;
-                 day <= displayedMonth.lengthOfMonth();
-                 day++) {
-
+            for (
+                    int day = 1;
+                    day <= displayedMonth.lengthOfMonth();
+                    day++
+            ) {
                 LocalDate date =
                         displayedMonth.atDay(day);
 
                 boolean available =
-                        !date.isBefore(LocalDate.now())
+                        selectedTechnician != null
+                                && baseService != null
+                                && !date.isBefore(LocalDate.now())
                                 && !availableSlots(
                                 connection,
                                 selectedTechnician.id(),
@@ -1213,19 +1607,38 @@ public class AppointmentBookingPanel extends JPanel {
                         ).isEmpty();
 
                 DayButton button =
-                        new DayButton(day, available);
+                        new DayButton(
+                                day,
+                                available
+                        );
 
-                button.addActionListener(e -> {
+                button.setToolTipText(
+                        available
+                                ? "Serviciile selectate sunt permise "
+                                + "și există ore disponibile."
+                                : "Serviciile selectate nu sunt disponibile "
+                                + "sau nu există timp liber suficient."
+                );
+
+                button.addActionListener(event -> {
+                    if (bookingBusy) {
+                        return;
+                    }
+
                     selectedDate = date;
 
-                    for (Component component :
-                            calendarGrid.getComponents()) {
-
+                    for (
+                            Component component
+                            : calendarGrid.getComponents()
+                    ) {
                         if (component instanceof DayButton item) {
-                            item.setSelected(item == button);
+                            item.setSelected(
+                                    item == button
+                            );
                         }
                     }
 
+                    calendarGrid.repaint();
                     loadAvailableHours();
                 });
 
@@ -1233,14 +1646,27 @@ public class AppointmentBookingPanel extends JPanel {
             }
 
         } catch (SQLException exception) {
-            showError(
-                    "Disponibilitatea nu a putut fi încărcată. "
-                            + "Verifică eroarea din consolă."
-            );
             exception.printStackTrace();
+
+            loadingError =
+                    "Disponibilitatea nu a putut fi încărcată: "
+                            + exceptionMessage(exception);
+
+            calendarGrid.removeAll();
+
+            calendarGrid.add(
+                    label(
+                            "Eroare",
+                            12,
+                            true,
+                            RED
+                    )
+            );
         }
 
-        while (calendarGrid.getComponentCount() < 49) {
+        while (
+                calendarGrid.getComponentCount() < 49
+        ) {
             calendarGrid.add(new JLabel());
         }
 
@@ -1249,43 +1675,60 @@ public class AppointmentBookingPanel extends JPanel {
 
         hoursPanel.revalidate();
         hoursPanel.repaint();
+
+        if (loadingError != null) {
+            showError(loadingError);
+        }
     }
 
     private void loadAvailableHours() {
         hoursPanel.removeAll();
 
-        if (selectedDate == null) {
+        if (
+                selectedDate == null
+                        || selectedTechnician == null
+                        || baseService == null
+        ) {
+            hoursPanel.revalidate();
+            hoursPanel.repaint();
             return;
         }
 
         hoursTitle.setText(
                 "Ore disponibile · "
-                        + selectedDate.format(DATE_FORMAT)
+                        + selectedDate.format(
+                        DATE_FORMAT
+                )
         );
 
         try (
                 Connection connection =
                         DatabaseConnection.getConnection()
         ) {
-            List<LocalDateTime> slots = availableSlots(
-                    connection,
-                    selectedTechnician.id(),
-                    selectedDate,
-                    totalDuration()
-            );
+            List<LocalDateTime> slots =
+                    availableSlots(
+                            connection,
+                            selectedTechnician.id(),
+                            selectedDate,
+                            totalDuration()
+                    );
 
             for (LocalDateTime slot : slots) {
-                JButton button = new JButton(
-                        slot.format(TIME_FORMAT)
-                );
+                JButton button =
+                        new JButton(
+                                slot.format(
+                                        TIME_FORMAT
+                                )
+                        );
 
                 styleSecondary(button);
+
                 button.setPreferredSize(
                         new Dimension(100, 39)
                 );
 
-                button.addActionListener(e ->
-                        confirmAppointment(slot)
+                button.addActionListener(
+                        event -> confirmAppointment(slot)
                 );
 
                 hoursPanel.add(button);
@@ -1294,7 +1737,10 @@ public class AppointmentBookingPanel extends JPanel {
             if (slots.isEmpty()) {
                 hoursPanel.add(
                         label(
-                                "Nu mai există ore disponibile.",
+                                "<html>"
+                                        + "Nu există ore disponibile pentru "
+                                        + "serviciile selectate în această zi."
+                                        + "</html>",
                                 12,
                                 false,
                                 MUTED
@@ -1303,14 +1749,155 @@ public class AppointmentBookingPanel extends JPanel {
             }
 
         } catch (SQLException exception) {
-            showError(
-                    "Orele disponibile nu au putut fi încărcate."
-            );
             exception.printStackTrace();
+
+            showError(
+                    "Orele disponibile nu au putut fi încărcate: "
+                            + exceptionMessage(exception)
+            );
         }
 
         hoursPanel.revalidate();
         hoursPanel.repaint();
+    }
+
+    private boolean selectedServicesAllowedOnDay(
+            Connection connection,
+            int technicianId,
+            LocalDate date
+    ) throws SQLException {
+
+        if (baseService == null) {
+            return false;
+        }
+
+        return servicesAllowedOnDay(
+                connection,
+                technicianId,
+                date,
+                selectedServices()
+        );
+    }
+
+    private boolean servicesAllowedOnDay(
+            Connection connection,
+            int technicianId,
+            LocalDate date,
+            List<ServiceItem> requested
+    ) throws SQLException {
+
+        if (requested.isEmpty()) {
+            return false;
+        }
+
+        boolean configured = false;
+
+        String configurationSql = """
+                SELECT tip_zi
+                FROM configurare_zi_tehnician
+                WHERE id_tehnician = ?
+                  AND data = ?
+                """;
+
+        try (
+                PreparedStatement statement =
+                        connection.prepareStatement(
+                                configurationSql
+                        )
+        ) {
+            statement.setInt(
+                    1,
+                    technicianId
+            );
+
+            statement.setDate(
+                    2,
+                    java.sql.Date.valueOf(date)
+            );
+
+            try (
+                    ResultSet rows =
+                            statement.executeQuery()
+            ) {
+                if (rows.next()) {
+                    configured = true;
+
+                    if (
+                            !"Lucru".equals(
+                                    rows.getString("tip_zi")
+                            )
+                    ) {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        String servicesSql;
+
+        if (configured) {
+            servicesSql = """
+                    SELECT ts.id_serviciu
+                    FROM tehnician_serviciu ts
+                    JOIN serviciu_zi_tehnician sz
+                        ON sz.id_tehnician = ts.id_tehnician
+                       AND sz.id_serviciu = ts.id_serviciu
+                    WHERE ts.id_tehnician = ?
+                      AND ts.stare_oferta = 'Activa'
+                      AND sz.data = ?
+                    """;
+
+        } else {
+            servicesSql = """
+                    SELECT ts.id_serviciu
+                    FROM tehnician_serviciu ts
+                    WHERE ts.id_tehnician = ?
+                      AND ts.stare_oferta = 'Activa'
+                    """;
+        }
+
+        Set<Integer> allowedIds =
+                new HashSet<>();
+
+        try (
+                PreparedStatement statement =
+                        connection.prepareStatement(
+                                servicesSql
+                        )
+        ) {
+            statement.setInt(
+                    1,
+                    technicianId
+            );
+
+            if (configured) {
+                statement.setDate(
+                        2,
+                        java.sql.Date.valueOf(date)
+                );
+            }
+
+            try (
+                    ResultSet rows =
+                            statement.executeQuery()
+            ) {
+                while (rows.next()) {
+                    allowedIds.add(
+                            rows.getInt(
+                                    "id_serviciu"
+                            )
+                    );
+                }
+            }
+        }
+
+        for (ServiceItem service : requested) {
+            if (!allowedIds.contains(service.id())) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private List<LocalDateTime> availableSlots(
@@ -1320,16 +1907,64 @@ public class AppointmentBookingPanel extends JPanel {
             int duration
     ) throws SQLException {
 
-        if (duration <= 0) {
+        if (
+                duration <= 0
+                        || date.isBefore(LocalDate.now())
+        ) {
+            return List.of();
+        }
+
+        if (
+                !selectedServicesAllowedOnDay(
+                        connection,
+                        technicianId,
+                        date
+                )
+        ) {
+            return List.of();
+        }
+
+        return calculateTimeSlots(
+                connection,
+                technicianId,
+                date,
+                duration
+        );
+    }
+
+    private List<LocalDateTime> calculateTimeSlots(
+            Connection connection,
+            int technicianId,
+            LocalDate date,
+            int duration
+    ) throws SQLException {
+
+        if (
+                duration <= 0
+                        || date.isBefore(LocalDate.now())
+        ) {
+            return List.of();
+        }
+
+        List<TimeInterval> courseIntervals =
+                loadCourseIntervals(
+                        connection,
+                        technicianId,
+                        date
+                );
+
+        if (!courseIntervals.isEmpty()) {
             return List.of();
         }
 
         List<TimeInterval> work =
-                loadAvailabilityIntervals(
-                        connection,
-                        technicianId,
-                        date,
-                        "Lucru"
+                mergeWorkIntervals(
+                        loadAvailabilityIntervals(
+                                connection,
+                                technicianId,
+                                date,
+                                "Lucru"
+                        )
                 );
 
         List<TimeInterval> busy =
@@ -1348,15 +1983,8 @@ public class AppointmentBookingPanel extends JPanel {
                 )
         );
 
-        busy.addAll(
-                loadCourseIntervals(
-                        connection,
-                        technicianId,
-                        date
-                )
-        );
-
-        TreeSet<LocalDateTime> slots = new TreeSet<>();
+        TreeSet<LocalDateTime> slots =
+                new TreeSet<>();
 
         LocalDateTime dayStart =
                 date.atStartOfDay();
@@ -1364,7 +1992,8 @@ public class AppointmentBookingPanel extends JPanel {
         LocalDateTime dayEnd =
                 date.plusDays(1).atStartOfDay();
 
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now =
+                LocalDateTime.now();
 
         for (TimeInterval interval : work) {
             LocalDateTime start =
@@ -1377,10 +2006,12 @@ public class AppointmentBookingPanel extends JPanel {
                             ? interval.end()
                             : dayEnd;
 
-            for (LocalDateTime candidate = start;
-                 !candidate.plusMinutes(duration).isAfter(end);
-                 candidate = candidate.plusMinutes(30)) {
-
+            for (
+                    LocalDateTime candidate = start;
+                    !candidate.plusMinutes(duration)
+                            .isAfter(end);
+                    candidate = candidate.plusMinutes(30)
+            ) {
                 if (!candidate.isAfter(now)) {
                     continue;
                 }
@@ -1391,11 +2022,14 @@ public class AppointmentBookingPanel extends JPanel {
                 boolean overlaps = false;
 
                 for (TimeInterval occupied : busy) {
-                    if (candidate.isBefore(occupied.end())
-                            && candidateEnd.isAfter(
-                            occupied.start()
-                    )) {
-
+                    if (
+                            candidate.isBefore(
+                                    occupied.end()
+                            )
+                                    && candidateEnd.isAfter(
+                                    occupied.start()
+                            )
+                    ) {
                         overlaps = true;
                         break;
                     }
@@ -1408,6 +2042,58 @@ public class AppointmentBookingPanel extends JPanel {
         }
 
         return new ArrayList<>(slots);
+    }
+
+    private List<TimeInterval> mergeWorkIntervals(
+            List<TimeInterval> intervals
+    ) {
+        List<TimeInterval> sorted =
+                new ArrayList<>(intervals);
+
+        sorted.sort(
+                Comparator.comparing(
+                        TimeInterval::start
+                )
+        );
+
+        List<TimeInterval> merged =
+                new ArrayList<>();
+
+        for (TimeInterval current : sorted) {
+            if (merged.isEmpty()) {
+                merged.add(current);
+                continue;
+            }
+
+            TimeInterval previous =
+                    merged.get(
+                            merged.size() - 1
+                    );
+
+            if (
+                    !current.start().isAfter(
+                            previous.end()
+                    )
+            ) {
+                LocalDateTime end =
+                        current.end().isAfter(previous.end())
+                                ? current.end()
+                                : previous.end();
+
+                merged.set(
+                        merged.size() - 1,
+                        new TimeInterval(
+                                previous.start(),
+                                end
+                        )
+                );
+
+            } else {
+                merged.add(current);
+            }
+        }
+
+        return merged;
     }
 
     private List<TimeInterval> loadAvailabilityIntervals(
@@ -1427,28 +2113,42 @@ public class AppointmentBookingPanel extends JPanel {
                 ORDER BY inceput
                 """;
 
-        List<TimeInterval> result = new ArrayList<>();
+        List<TimeInterval> result =
+                new ArrayList<>();
 
         try (
                 PreparedStatement statement =
                         connection.prepareStatement(sql)
         ) {
-            statement.setInt(1, technicianId);
-            statement.setString(2, type);
+            statement.setInt(
+                    1,
+                    technicianId
+            );
+
+            statement.setString(
+                    2,
+                    type
+            );
 
             statement.setTimestamp(
                     3,
                     Timestamp.valueOf(
-                            date.plusDays(1).atStartOfDay()
+                            date.plusDays(1)
+                                    .atStartOfDay()
                     )
             );
 
             statement.setTimestamp(
                     4,
-                    Timestamp.valueOf(date.atStartOfDay())
+                    Timestamp.valueOf(
+                            date.atStartOfDay()
+                    )
             );
 
-            try (ResultSet rows = statement.executeQuery()) {
+            try (
+                    ResultSet rows =
+                            statement.executeQuery()
+            ) {
                 while (rows.next()) {
                     result.add(
                             new TimeInterval(
@@ -1495,32 +2195,76 @@ public class AppointmentBookingPanel extends JPanel {
                 ORDER BY p.data, p.ora
                 """;
 
-        List<TimeInterval> result = new ArrayList<>();
+        List<TimeInterval> result =
+                new ArrayList<>();
+
+        LocalDateTime dayStart =
+                date.atStartOfDay();
+
+        LocalDateTime dayEnd =
+                date.plusDays(1).atStartOfDay();
 
         try (
                 PreparedStatement statement =
                         connection.prepareStatement(sql)
         ) {
-            statement.setInt(1, technicianId);
+            statement.setInt(
+                    1,
+                    technicianId
+            );
+
             statement.setDate(
                     2,
                     java.sql.Date.valueOf(date)
             );
 
-            try (ResultSet rows = statement.executeQuery()) {
+            try (
+                    ResultSet rows =
+                            statement.executeQuery()
+            ) {
                 while (rows.next()) {
-                    LocalDateTime start = LocalDateTime.of(
-                            rows.getDate("data").toLocalDate(),
-                            rows.getTime("ora").toLocalTime()
-                    );
+                    LocalDateTime start =
+                            LocalDateTime.of(
+                                    rows.getDate("data")
+                                            .toLocalDate(),
+                                    rows.getTime("ora")
+                                            .toLocalTime()
+                            );
 
-                    LocalDateTime end = start.plusMinutes(
-                            rows.getInt("durata_totala")
-                    );
+                    int duration =
+                            rows.getInt(
+                                    "durata_totala"
+                            );
 
-                    if (end.isAfter(date.atStartOfDay())) {
+                    if (duration <= 0) {
+                        if (
+                                start.toLocalDate()
+                                        .equals(date)
+                        ) {
+                            throw new SQLException(
+                                    "Programarea "
+                                            + rows.getInt(
+                                            "id_programare"
+                                    )
+                                            + " nu are durată validă."
+                            );
+                        }
+
+                        continue;
+                    }
+
+                    LocalDateTime end =
+                            start.plusMinutes(duration);
+
+                    if (
+                            start.isBefore(dayEnd)
+                                    && end.isAfter(dayStart)
+                    ) {
                         result.add(
-                                new TimeInterval(start, end)
+                                new TimeInterval(
+                                        start,
+                                        end
+                                )
                         );
                     }
                 }
@@ -1537,104 +2281,248 @@ public class AppointmentBookingPanel extends JPanel {
     ) throws SQLException {
 
         String sql = """
-                SELECT i.inceput, i.sfarsit
+                SELECT i.id_interval
                 FROM interval_sesiune i
                 JOIN sesiune_curs s
                     ON s.id_sesiune = i.id_sesiune
                 WHERE s.id_trainer = ?
                   AND s.stare <> 'Anulata'
-                  AND i.inceput < ?
-                  AND i.sfarsit > ?
-                ORDER BY i.inceput
+                  AND (
+                      i.data_zi = ?
+                      OR (
+                          i.inceput < ?
+                          AND i.sfarsit > ?
+                      )
+                  )
+                LIMIT 1
                 """;
-
-        List<TimeInterval> result = new ArrayList<>();
 
         try (
                 PreparedStatement statement =
                         connection.prepareStatement(sql)
         ) {
-            statement.setInt(1, technicianId);
+            statement.setInt(
+                    1,
+                    technicianId
+            );
 
-            statement.setTimestamp(
+            statement.setDate(
                     2,
-                    Timestamp.valueOf(
-                            date.plusDays(1).atStartOfDay()
-                    )
+                    java.sql.Date.valueOf(date)
             );
 
             statement.setTimestamp(
                     3,
-                    Timestamp.valueOf(date.atStartOfDay())
+                    Timestamp.valueOf(
+                            date.plusDays(1)
+                                    .atStartOfDay()
+                    )
             );
 
-            try (ResultSet rows = statement.executeQuery()) {
-                while (rows.next()) {
-                    result.add(
+            statement.setTimestamp(
+                    4,
+                    Timestamp.valueOf(
+                            date.atStartOfDay()
+                    )
+            );
+
+            try (
+                    ResultSet rows =
+                            statement.executeQuery()
+            ) {
+                if (rows.next()) {
+                    return List.of(
                             new TimeInterval(
-                                    rows.getTimestamp("inceput")
-                                            .toLocalDateTime(),
-                                    rows.getTimestamp("sfarsit")
-                                            .toLocalDateTime()
+                                    date.atStartOfDay(),
+                                    date.plusDays(1)
+                                            .atStartOfDay()
                             )
                     );
                 }
             }
         }
 
-        return result;
+        return List.of();
     }
 
-    private void confirmAppointment(LocalDateTime start) {
-        if (bookingBusy || baseService == null) {
+    private void confirmAppointment(
+            LocalDateTime start
+    ) {
+        if (
+                bookingBusy
+                        || baseService == null
+                        || selectedTechnician == null
+        ) {
             return;
         }
 
-        StringBuilder message = new StringBuilder();
+        StringBuilder message =
+                new StringBuilder();
 
-        message.append(selectedTechnician.name())
+        message.append(
+                        selectedTechnician.name()
+                )
                 .append("\n")
-                .append(start.format(DATE_FORMAT))
+                .append(
+                        start.format(DATE_FORMAT)
+                )
                 .append(", ora ")
-                .append(start.format(TIME_FORMAT))
+                .append(
+                        start.format(TIME_FORMAT)
+                )
                 .append("\n\n")
-                .append(baseDisplayName());
+                .append(
+                        baseDisplayName()
+                );
 
         if (designService != null) {
             message.append("\nDesign ")
-                    .append(designName(designService));
+                    .append(
+                            designName(
+                                    designService
+                            )
+                    );
         }
 
-        if ("MAINTENANCE".equals(selectedType)
-                && extraService != null) {
-
+        if (
+                "MAINTENANCE".equals(selectedType)
+                        && extraService != null
+        ) {
             message.append("\n")
-                    .append(extraName(extraService));
+                    .append(
+                            extraName(
+                                    extraService
+                            )
+                    );
         }
 
         message.append("\n\nTotal: ")
-                .append(money(totalPrice()))
-                .append("\n\nConfirmi programarea?");
+                .append(
+                        money(totalPrice())
+                )
+                .append(
+                        "\n\nConfirmi programarea?"
+                );
 
-        int answer = JOptionPane.showConfirmDialog(
-                this,
-                message.toString(),
-                "Confirmă programarea",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE
-        );
+        int answer =
+                JOptionPane.showConfirmDialog(
+                        this,
+                        message.toString(),
+                        "Confirmă programarea",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE
+                );
 
         if (answer == JOptionPane.YES_OPTION) {
             createAppointment(start);
         }
     }
 
-    private void createAppointment(LocalDateTime start) {
+    private void lockTechnicianForBooking(
+            Connection connection,
+            int technicianId
+    ) throws SQLException {
+
+        String employeeSql = """
+                SELECT id_angajat
+                FROM angajat
+                WHERE id_angajat = ?
+                FOR UPDATE
+                """;
+
+        try (
+                PreparedStatement statement =
+                        connection.prepareStatement(
+                                employeeSql
+                        )
+        ) {
+            statement.setInt(
+                    1,
+                    technicianId
+            );
+
+            try (
+                    ResultSet rows =
+                            statement.executeQuery()
+            ) {
+                if (!rows.next()) {
+                    throw new SQLException(
+                            "Angajatul nu mai există."
+                    );
+                }
+            }
+        }
+
+        String technicianSql = """
+                SELECT id_angajat
+                FROM tehnician
+                WHERE id_angajat = ?
+                FOR UPDATE
+                """;
+
+        try (
+                PreparedStatement statement =
+                        connection.prepareStatement(
+                                technicianSql
+                        )
+        ) {
+            statement.setInt(
+                    1,
+                    technicianId
+            );
+
+            try (
+                    ResultSet rows =
+                            statement.executeQuery()
+            ) {
+                if (!rows.next()) {
+                    throw new SQLException(
+                            "Tehniciana nu mai există."
+                    );
+                }
+            }
+        }
+    }
+
+    private void createAppointment(
+            LocalDateTime start
+    ) {
+        if (
+                bookingBusy
+                        || selectedTechnician == null
+                        || baseService == null
+        ) {
+            return;
+        }
+
+        TechnicianItem technician =
+                selectedTechnician;
+
+        List<ServiceItem> services =
+                List.copyOf(
+                        selectedServices()
+                );
+
+        int duration =
+                services.stream()
+                        .mapToInt(
+                                ServiceItem::duration
+                        )
+                        .sum();
+
+        BigDecimal price =
+                services.stream()
+                        .map(ServiceItem::price)
+                        .reduce(
+                                BigDecimal.ZERO,
+                                BigDecimal::add
+                        );
+
         bookingBusy = true;
         updateSummary();
 
-        List<ServiceItem> services =
-                List.copyOf(selectedServices());
+        boolean committed = false;
+        String failure = null;
 
         try (
                 Connection connection =
@@ -1643,27 +2531,27 @@ public class AppointmentBookingPanel extends JPanel {
             connection.setAutoCommit(false);
 
             try {
-                try (
-                        PreparedStatement lock =
-                                connection.prepareStatement("""
-                                        SELECT id_angajat
-                                        FROM tehnician
-                                        WHERE id_angajat = ?
-                                        FOR UPDATE
-                                        """)
-                ) {
-                    lock.setInt(
-                            1,
-                            selectedTechnician.id()
-                    );
+                lockTechnicianForBooking(
+                        connection,
+                        technician.id()
+                );
 
-                    try (ResultSet rows = lock.executeQuery()) {
-                        if (!rows.next()) {
-                            throw new SQLException(
-                                    "Tehniciana nu mai există."
-                            );
-                        }
-                    }
+                if (
+                        !servicesAllowedOnDay(
+                                connection,
+                                technician.id(),
+                                start.toLocalDate(),
+                                services
+                        )
+                ) {
+                    throw new SQLException(
+                            "Unul dintre serviciile selectate "
+                                    + "nu este disponibil la această "
+                                    + "tehniciană în data de "
+                                    + start.format(DATE_FORMAT)
+                                    + ". Modifică serviciul "
+                                    + "sau alege altă zi."
+                    );
                 }
 
                 Integer clientId =
@@ -1676,23 +2564,18 @@ public class AppointmentBookingPanel extends JPanel {
                 }
 
                 List<LocalDateTime> currentSlots =
-                        availableSlots(
+                        calculateTimeSlots(
                                 connection,
-                                selectedTechnician.id(),
+                                technician.id(),
                                 start.toLocalDate(),
-                                totalDuration()
+                                duration
                         );
 
                 if (!currentSlots.contains(start)) {
-                    connection.rollback();
-
-                    refreshCalendar();
-
-                    showError(
+                    throw new SQLException(
                             "Ora nu mai este disponibilă. "
                                     + "Alege un alt interval."
                     );
-                    return;
                 }
 
                 int appointmentId;
@@ -1715,11 +2598,14 @@ public class AppointmentBookingPanel extends JPanel {
                                         Statement.RETURN_GENERATED_KEYS
                                 )
                 ) {
-                    statement.setInt(1, clientId);
+                    statement.setInt(
+                            1,
+                            clientId
+                    );
 
                     statement.setInt(
                             2,
-                            selectedTechnician.id()
+                            technician.id()
                     );
 
                     statement.setDate(
@@ -1744,11 +2630,13 @@ public class AppointmentBookingPanel extends JPanel {
                     ) {
                         if (!keys.next()) {
                             throw new SQLException(
-                                    "Nu s-a obținut ID-ul programării."
+                                    "Nu s-a obținut "
+                                            + "ID-ul programării."
                             );
                         }
 
-                        appointmentId = keys.getInt(1);
+                        appointmentId =
+                                keys.getInt(1);
                     }
                 }
 
@@ -1771,8 +2659,15 @@ public class AppointmentBookingPanel extends JPanel {
                                 )
                 ) {
                     for (ServiceItem service : services) {
-                        statement.setInt(1, appointmentId);
-                        statement.setInt(2, service.id());
+                        statement.setInt(
+                                1,
+                                appointmentId
+                        );
+
+                        statement.setInt(
+                                2,
+                                service.id()
+                        );
 
                         statement.setBigDecimal(
                                 3,
@@ -1796,40 +2691,57 @@ public class AppointmentBookingPanel extends JPanel {
                 }
 
                 connection.commit();
+                committed = true;
 
             } catch (Exception exception) {
-                connection.rollback();
+                try {
+                    connection.rollback();
+
+                } catch (SQLException rollbackException) {
+                    exception.addSuppressed(
+                            rollbackException
+                    );
+                }
+
                 throw exception;
             }
 
-            refreshCalendar();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            failure = exceptionMessage(exception);
 
+        } finally {
+            bookingBusy = false;
+            updateSummary();
+        }
+
+        refreshCalendar();
+
+        if (committed) {
             statusLabel.setForeground(GREEN);
+
             statusLabel.setText(
                     "Programarea a fost creată pentru "
                             + start.format(DATE_FORMAT)
                             + ", ora "
                             + start.format(TIME_FORMAT)
                             + ". Total: "
-                            + money(totalPrice())
+                            + money(price)
                             + "."
             );
 
-        } catch (Exception exception) {
+        } else {
             showError(
-                    "Programarea nu a putut fi creată. "
-                            + "Verifică eroarea din consolă."
+                    failure == null
+                            ? "Programarea nu a putut fi creată."
+                            : failure
             );
-            exception.printStackTrace();
-
-        } finally {
-            bookingBusy = false;
-            updateSummary();
         }
     }
 
-    private Integer findClientId(Connection connection)
-            throws SQLException {
+    private Integer findClientId(
+            Connection connection
+    ) throws SQLException {
 
         String sql = """
                 SELECT id_client
@@ -1841,11 +2753,20 @@ public class AppointmentBookingPanel extends JPanel {
                 PreparedStatement statement =
                         connection.prepareStatement(sql)
         ) {
-            statement.setString(1, userEmail);
+            statement.setString(
+                    1,
+                    userEmail
+            );
 
-            try (ResultSet result = statement.executeQuery()) {
+            try (
+                    ResultSet result =
+                            statement.executeQuery()
+            ) {
                 if (result.next()) {
-                    int id = result.getInt("id_client");
+                    int id =
+                            result.getInt(
+                                    "id_client"
+                            );
 
                     if (!result.wasNull()) {
                         return id;
@@ -1857,10 +2778,28 @@ public class AppointmentBookingPanel extends JPanel {
         return null;
     }
 
-    private void stylePrimary(JButton button) {
+    private String exceptionMessage(
+            Throwable exception
+    ) {
+        String message =
+                exception.getMessage();
+
+        return message == null || message.isBlank()
+                ? "Operația nu a putut fi efectuată."
+                : message;
+    }
+
+    private void stylePrimary(
+            JButton button
+    ) {
         button.setFont(
-                new Font("SansSerif", Font.BOLD, 13)
+                new Font(
+                        "SansSerif",
+                        Font.BOLD,
+                        13
+                )
         );
+
         button.setBackground(INK);
         button.setForeground(WHITE);
         button.setFocusPainted(false);
@@ -1871,13 +2810,23 @@ public class AppointmentBookingPanel extends JPanel {
                 )
         );
 
-        button.putClientProperty("JButton.arc", 18);
+        button.putClientProperty(
+                "JButton.arc",
+                18
+        );
     }
 
-    private void styleSecondary(JButton button) {
+    private void styleSecondary(
+            JButton button
+    ) {
         button.setFont(
-                new Font("SansSerif", Font.PLAIN, 12)
+                new Font(
+                        "SansSerif",
+                        Font.PLAIN,
+                        12
+                )
         );
+
         button.setBackground(FIELD);
         button.setForeground(INK);
         button.setFocusPainted(false);
@@ -1888,12 +2837,22 @@ public class AppointmentBookingPanel extends JPanel {
                 )
         );
 
-        button.putClientProperty("JButton.arc", 18);
+        button.putClientProperty(
+                "JButton.arc",
+                18
+        );
     }
 
-    private void showError(String message) {
+    private void showError(
+            String message
+    ) {
         statusLabel.setForeground(RED);
-        statusLabel.setText(message);
+
+        statusLabel.setText(
+                "<html>"
+                        + escape(message)
+                        + "</html>"
+        );
     }
 
     private record TechnicianItem(
@@ -1924,51 +2883,66 @@ public class AppointmentBookingPanel extends JPanel {
     ) {
     }
 
-    private static class RoundedPanel extends JPanel {
+    private static class RoundedPanel
+            extends JPanel {
 
         private final Color fill;
         private final int arc;
 
-        RoundedPanel(Color fill, int arc) {
+        RoundedPanel(
+                Color fill,
+                int arc
+        ) {
             this.fill = fill;
             this.arc = arc;
+
             setOpaque(false);
         }
 
         @Override
-        protected void paintComponent(Graphics graphics) {
+        protected void paintComponent(
+                Graphics graphics
+        ) {
             super.paintComponent(graphics);
 
             Graphics2D g =
                     (Graphics2D) graphics.create();
 
-            g.setRenderingHint(
-                    RenderingHints.KEY_ANTIALIASING,
-                    RenderingHints.VALUE_ANTIALIAS_ON
-            );
+            try {
+                g.setRenderingHint(
+                        RenderingHints.KEY_ANTIALIASING,
+                        RenderingHints.VALUE_ANTIALIAS_ON
+                );
 
-            g.setColor(fill);
+                g.setColor(fill);
 
-            g.fillRoundRect(
-                    0,
-                    0,
-                    getWidth(),
-                    getHeight(),
-                    arc,
-                    arc
-            );
+                g.fillRoundRect(
+                        0,
+                        0,
+                        getWidth(),
+                        getHeight(),
+                        arc,
+                        arc
+                );
 
-            g.dispose();
+            } finally {
+                g.dispose();
+            }
         }
     }
 
-    private static class ChoiceButton extends JButton {
+    private static class ChoiceButton
+            extends JButton {
 
         ChoiceButton(String text) {
             super(text);
 
             setFont(
-                    new Font("SansSerif", Font.PLAIN, 13)
+                    new Font(
+                            "SansSerif",
+                            Font.PLAIN,
+                            13
+                    )
             );
 
             setForeground(INK);
@@ -1996,71 +2970,89 @@ public class AppointmentBookingPanel extends JPanel {
         }
 
         @Override
-        protected void paintComponent(Graphics graphics) {
+        protected void paintComponent(
+                Graphics graphics
+        ) {
             Graphics2D g =
                     (Graphics2D) graphics.create();
 
-            g.setRenderingHint(
-                    RenderingHints.KEY_ANTIALIASING,
-                    RenderingHints.VALUE_ANTIALIAS_ON
-            );
+            try {
+                g.setRenderingHint(
+                        RenderingHints.KEY_ANTIALIASING,
+                        RenderingHints.VALUE_ANTIALIAS_ON
+                );
 
-            Color fill;
+                Color fill;
 
-            if (!isEnabled()) {
-                fill = FIELD;
+                if (!isEnabled()) {
+                    fill = FIELD;
 
-            } else if (isSelected()) {
-                fill = HOVER;
+                } else if (isSelected()) {
+                    fill = HOVER;
 
-            } else if (getModel().isRollover()) {
-                fill = new Color(239, 231, 218);
+                } else if (getModel().isRollover()) {
+                    fill = new Color(
+                            239, 231, 218
+                    );
 
-            } else {
-                fill = BEIGE;
+                } else {
+                    fill = BEIGE;
+                }
+
+                g.setColor(fill);
+
+                g.fillRoundRect(
+                        0,
+                        0,
+                        getWidth(),
+                        getHeight(),
+                        25,
+                        25
+                );
+
+                g.setColor(
+                        isSelected()
+                                ? GREEN
+                                : BORDER
+                );
+
+                g.setStroke(
+                        new BasicStroke(
+                                isSelected()
+                                        ? 2f
+                                        : 1f
+                        )
+                );
+
+                g.drawRoundRect(
+                        1,
+                        1,
+                        getWidth() - 3,
+                        getHeight() - 3,
+                        25,
+                        25
+                );
+
+            } finally {
+                g.dispose();
             }
 
-            g.setColor(fill);
-
-            g.fillRoundRect(
-                    0,
-                    0,
-                    getWidth(),
-                    getHeight(),
-                    25,
-                    25
-            );
-
-            g.setColor(
-                    isSelected() ? GREEN : BORDER
-            );
-
-            g.setStroke(
-                    new BasicStroke(
-                            isSelected() ? 2f : 1f
-                    )
-            );
-
-            g.drawRoundRect(
-                    1,
-                    1,
-                    getWidth() - 3,
-                    getHeight() - 3,
-                    25,
-                    25
-            );
-
-            g.dispose();
             super.paintComponent(graphics);
         }
     }
 
-    private static class DayButton extends JButton {
+    private static class DayButton
+            extends JButton {
 
         private final boolean available;
 
-        DayButton(int day, boolean available) {
-            super(String.valueOf(day));
+        DayButton(
+                int day,
+                boolean available
+        ) {
+            super(
+                    String.valueOf(day)
+            );
 
             this.available = available;
 
@@ -2071,11 +3063,17 @@ public class AppointmentBookingPanel extends JPanel {
             setFocusPainted(false);
 
             setFont(
-                    new Font("SansSerif", Font.BOLD, 14)
+                    new Font(
+                            "SansSerif",
+                            Font.BOLD,
+                            14
+                    )
             );
 
             setForeground(
-                    available ? INK : MUTED
+                    available
+                            ? INK
+                            : MUTED
             );
 
             setCursor(
@@ -2088,63 +3086,74 @@ public class AppointmentBookingPanel extends JPanel {
         }
 
         @Override
-        protected void paintComponent(Graphics graphics) {
+        protected void paintComponent(
+                Graphics graphics
+        ) {
             Graphics2D g =
                     (Graphics2D) graphics.create();
 
-            g.setRenderingHint(
-                    RenderingHints.KEY_ANTIALIASING,
-                    RenderingHints.VALUE_ANTIALIAS_ON
-            );
-
-            g.setColor(
-                    isSelected() ? BEIGE : FIELD
-            );
-
-            g.fillRoundRect(
-                    0,
-                    0,
-                    getWidth(),
-                    getHeight(),
-                    16,
-                    16
-            );
-
-            g.setColor(
-                    isSelected() ? GREEN : BORDER
-            );
-
-            g.drawRoundRect(
-                    0,
-                    0,
-                    getWidth() - 1,
-                    getHeight() - 1,
-                    16,
-                    16
-            );
-
-            if (available) {
-                int inset = Math.max(
-                        7,
-                        getWidth() / 5
+            try {
+                g.setRenderingHint(
+                        RenderingHints.KEY_ANTIALIASING,
+                        RenderingHints.VALUE_ANTIALIAS_ON
                 );
 
-                g.setColor(GREEN);
+                g.setColor(
+                        isSelected()
+                                ? BEIGE
+                                : FIELD
+                );
 
                 g.fillRoundRect(
-                        inset,
-                        getHeight() - 8,
-                        Math.max(
-                                4,
-                                getWidth() - inset * 2
-                        ),
-                        4,
-                        4,
-                        4
+                        0,
+                        0,
+                        getWidth(),
+                        getHeight(),
+                        16,
+                        16
                 );
+
+                g.setColor(
+                        isSelected()
+                                ? GREEN
+                                : BORDER
+                );
+
+                g.drawRoundRect(
+                        0,
+                        0,
+                        getWidth() - 1,
+                        getHeight() - 1,
+                        16,
+                        16
+                );
+
+                if (available) {
+                    int inset =
+                            Math.max(
+                                    7,
+                                    getWidth() / 5
+                            );
+
+                    g.setColor(GREEN);
+
+                    g.fillRoundRect(
+                            inset,
+                            getHeight() - 8,
+                            Math.max(
+                                    4,
+                                    getWidth() - inset * 2
+                            ),
+                            4,
+                            4,
+                            4
+                    );
+                }
+
+            } finally {
+                g.dispose();
             }
 
-            g.dispose();
             super.paintComponent(graphics);
         }
     }
