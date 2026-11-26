@@ -1,5 +1,6 @@
 package salon.ui;
 
+import salon.ai.AiAssistant;
 import salon.db.DatabaseConnection;
 import salon.service.ClientService;
 import salon.ui.client.ClientActivityPanel;
@@ -148,6 +149,12 @@ public class ClientDashboard extends JFrame {
 
         disableDataEditing();
         loadProfileData();
+
+        AiAssistant.installForClient(
+                this,
+                this::showAppointments
+        );
+
         showHome();
 
         setVisible(true);
@@ -709,6 +716,8 @@ public class ClientDashboard extends JFrame {
                 contentPanel,
                 "HOME"
         );
+
+        setAssistantVisible(true);
     }
 
     private void showProfile() {
@@ -716,6 +725,8 @@ public class ClientDashboard extends JFrame {
                 contentPanel,
                 "PROFILE"
         );
+
+        setAssistantVisible(true);
     }
 
     private void showAppointments() {
@@ -723,6 +734,8 @@ public class ClientDashboard extends JFrame {
                 contentPanel,
                 "APPOINTMENTS"
         );
+
+        setAssistantVisible(false);
     }
 
     private void showCourses() {
@@ -730,6 +743,8 @@ public class ClientDashboard extends JFrame {
                 contentPanel,
                 "COURSES"
         );
+
+        setAssistantVisible(false);
     }
 
     private void showActivity() {
@@ -738,7 +753,19 @@ public class ClientDashboard extends JFrame {
                 "ACTIVITY"
         );
 
+        setAssistantVisible(true);
+
         activityPanel.refreshData();
+    }
+
+    private void setAssistantVisible(boolean visible) {
+        for (Component component : getLayeredPane().getComponents()) {
+            if (component.getClass().getName()
+                    .equals("salon.ai.AiAssistant$PillButton")) {
+
+                component.setVisible(visible);
+            }
+        }
     }
 
     private void logout() {

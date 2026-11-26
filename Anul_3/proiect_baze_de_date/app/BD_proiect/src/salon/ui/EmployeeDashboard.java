@@ -1,6 +1,6 @@
-
 package salon.ui;
 
+import salon.ai.AiAssistant;
 import salon.service.*;
 import salon.service.EmployeeAccessService.Access;
 import salon.ui.components.UiStyle;
@@ -42,7 +42,9 @@ public class EmployeeDashboard extends JFrame {
         registry=new SterilizationRegistryPanel(new SterilizationService(),access.employeeId(),this::showHome);
         content.add(registry,"REGISTRY");
         calendar=new EmployeeCalendarPanel(access,new AvailabilityService(),this::showHome,this::showCourses);
-        content.add(calendar,"CALENDAR");content.add(home(),"HOME");showHome();setVisible(true);
+        content.add(calendar,"CALENDAR");content.add(home(),"HOME");
+        AiAssistant.installForEmployee(this,access.employeeId(),access.technician(),access.trainer());
+        showHome();setVisible(true);
     }
     private JPanel topBar(){
         JPanel bar=new JPanel(new BorderLayout());bar.setBackground(UiStyle.INK);bar.setBorder(BorderFactory.createEmptyBorder(14,28,14,28));
@@ -68,7 +70,15 @@ public class EmployeeDashboard extends JFrame {
         background.add(card);return background;
     }
     private void addHome(JPanel card,GridBagConstraints c,String text,Runnable action){JButton b=UiStyle.primaryButton(text);b.setPreferredSize(new Dimension(530,48));b.addActionListener(e->action.run());c.gridy++;card.add(b,c);}
-    private void show(String name){((CardLayout)content.getLayout()).show(content,name);}
+    private void show(String name){
+        ((CardLayout)content.getLayout()).show(content,name);
+        setAssistantVisible("HOME".equals(name)||"PROFILE".equals(name));
+    }
+    private void setAssistantVisible(boolean visible){
+        for(Component component:getLayeredPane().getComponents()){
+            if(component.getClass().getName().equals("salon.ai.AiAssistant$PillButton"))component.setVisible(visible);
+        }
+    }
     public void showHome(){show("HOME");}
     public void showCourses(){if(courses!=null){courses.refreshData();show("COURSES");}}
     public void showParticipants(){if(participants!=null){participants.refreshData();show("PARTICIPANTS");}}

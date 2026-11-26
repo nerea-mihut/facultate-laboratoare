@@ -1,0 +1,5 @@
+# Copiază acest fișier ca ai.properties în folderul din care pornești aplicația.
+# Nu pune ai.properties în Git și nu îl trimite nimănui.
+api.key=PUNE_AICI_CHEIA
+api.url=https://api.perplexity.ai/chat/completions
+api.model=sonar
